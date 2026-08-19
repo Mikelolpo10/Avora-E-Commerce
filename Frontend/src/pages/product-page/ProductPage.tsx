@@ -10,6 +10,7 @@ import { type Product } from "../../interfaces/product.interface"
 import { API_URL } from "../../config/env"
 import { getProductBySlug, getSimilarProducts } from "../../api/product"
 import ProductPageSkeleton from "./ProductPageSkeleton"
+import ErrorPage from "../../components/ErrorPage"
 
 export default function ProductPage() {
   const { productSlug } = useParams()
@@ -25,10 +26,10 @@ export default function ProductPage() {
     enabled: !!productSlug,
   })
 
-  if (isError || similarError) return <h1>Data error</h1>
+  if (isError || similarError) return <ErrorPage text="The product you're looking for may have been removed or is no longer available." />
 
   if (isPending) return <ProductPageSkeleton />
-  
+
   return (
     <div className="mt-16 px-24 flex flex-col bg-gray">
       <div className="pt-8 flex w-full">
@@ -67,7 +68,7 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
-        
+
         <ProductDetails data={data} />
       </div>
 

@@ -5,7 +5,7 @@ import MainLayout from './components/layout/MainLayout'
 import Homepage from './pages/homepage/Homepage'
 import ProductPage from './pages/product-page/ProductPage'
 import ProductCategoryPage from './pages/product-category-page/ProductCategoryPage'
-import NotFoundPage from './pages/NotFoundPage'
+import ErrorPage from './components/ErrorPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -27,7 +27,7 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path='products/:productSlug' element={<ProductPage />} />
           <Route path='department/:department' element={<ProductCategoryPage />} />
-          <Route path='*' element={<NotFoundPage />} />
+          <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

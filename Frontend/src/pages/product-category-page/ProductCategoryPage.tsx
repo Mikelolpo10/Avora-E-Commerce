@@ -10,7 +10,7 @@ import capitalize from "@/utils/capitalize";
 import Toolbar from "./Toolbar";
 import ProductCard from "components/ProductCard";
 import ProductCardSkeleton from "components/ProductCardSkeleton";
-import NotFoundPage from "../NotFoundPage";
+import NotFoundPage from "../../components/ErrorPage";
 
 export default function ProductCategoryPage() {
   const { department } = useParams()
