@@ -37,7 +37,7 @@ export default function ColorOptions() {
           <div
             key={name}
             onClick={() => changeColor(index)}
-            className={`${active ? 'border-primary border-3' : ''} w-9 h-9 border-2 border-ash rounded-full cursor-pointer`}
+            className={`${active ? 'border-primary border-3 bg-white' : ''} p-0.5 w-10 h-10 bg-ash rounded-full cursor-pointer`}
           >
             <div className={`w-full h-full ${color} rounded-full`}></div>
           </div>
