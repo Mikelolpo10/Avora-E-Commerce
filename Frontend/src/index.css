@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
+
+@import 'tailwindcss';
+@plugin 'tailwind-scrollbar';
+
+@theme {
+  --color-primary: #101b2f;
+  --color-secondary: #d9d0c1;
+  --color-accent: #F6EDE3;
+  --color-background: #ffffff;
+
+  --color-gray: #FCFCFC;
+  --color-gray-dark: #f0f0f0;
+  --color-ash: #707070;
+  --color-primary-black: #0a0a0a;
+
+  --font-sans: "poppins", sans-serif;
+  --font-luxury: "Cormorant Garamond", serif;
+}
+
+;
+
+@layer base {
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
