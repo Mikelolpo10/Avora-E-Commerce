@@ -54,7 +54,7 @@ export default function NavBar() {
               key={item.path}
               to={`${item.path}`}
               className={({ isActive }) =>
-                `h-full flex items-center font-medium transition-all duration-300 hover:text-primary hover:underline hover:underline-offset-8 ${isActive ? 'font-semibold' : ''
+                `h-full flex items-center transition-all duration-300 hover:text-primary hover:underline hover:underline-offset-8 ${isActive ? 'font-bold' : 'font-medium'
                 }`
               }
             >
