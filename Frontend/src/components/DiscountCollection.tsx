@@ -4,17 +4,16 @@ import Countdown from "./common/Countdown";
 import formatRupiah from "../utils/formatRupiah";
 import getDiscountedPrice from "../utils/getDiscountedPrice";
 import type { Discount } from "../interfaces/discount.interface";
-import type { Product } from "../interfaces/product.interface";
 import { API_URL } from "../config/env";
 
-interface DiscountColection<T = Product> {
+interface DiscountColection {
   title: string;
   slug: string;
-  products?: T[];
+  products?: Discount[];
 }
 
 
-export default function DiscountColection({ title, slug, products }: DiscountColection<Discount>) {
+export default function DiscountColection({ title, slug, products }: DiscountColection) {
   const endTime: string = products?.[0]?.end_at || ''
   const [isExpired, setIsExpired] = useState<boolean>(false)
 
