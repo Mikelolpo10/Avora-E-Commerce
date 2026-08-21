@@ -15,7 +15,6 @@ export default function ProductCategories() {
     queryFn: getTodayDeals,
   })
 
-  console.log(flashSaleData)
 
   if (isLoading || todaysDealLoading) return null
     

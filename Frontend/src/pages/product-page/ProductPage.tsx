@@ -33,24 +33,25 @@ export default function ProductPage() {
   return (
     <div className="mt-16 px-24 flex flex-col bg-gray">
       <div className="pt-8 flex w-full">
-        <div className="flex w-160 h-124">
-          <div className="flex flex-col w-40 gap-4">
+        <div className="flex w-180 h-140">
+          <div className="flex flex-col w-44 gap-4">
             {[1, 2, 3, 4].map((item, index) => (
               <div
                 key={index}
-                className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center bg-gray-dark w-28 h-28 rounded-xl cursor-pointer`}
+                className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center bg-gray-dark w-32 h-32 rounded-xl cursor-pointer`}
                 onClick={() => setActiveImg(item)}
               >
                 <img
-                  src={`${API_URL}${data.image_url}-${item}.png`}
+                  src={`${API_URL}${data.image_url}-${item}.webp`}
                   alt={`${data.image_url}-${item}`}
+                  className="h-full"
                 />
               </div>
             ))}
           </div>
           <div className="group relative flex w-full bg-gray-dark rounded-2xl">
             <img
-              src={`${API_URL}${data?.image_url}-${activeImg}.png`}
+              src={`${API_URL}${data?.image_url}-${activeImg}.webp`}
               alt="Thumbnail"
               className="w-full select-none"
             />
@@ -102,7 +103,7 @@ export default function ProductPage() {
           ))}
         </div>
 
-        <div className="my-12 py-3 px-6 border border-primary-black bg-primary text-white text-sm font-medium shadow-2xl cursor-pointer">
+        <div className="my-12 py-3 px-6 border border-primary-black bg-primary text-white text-sm font-medium shadow-2xl cursor-pointer select-none">
           Read More Reviews
         </div>
       </section>
