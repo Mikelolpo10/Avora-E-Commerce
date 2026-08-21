@@ -1,16 +1,10 @@
 import type { Request, Response } from 'express'
-import { validate as isUUID } from "uuid";
 import { pool } from '../config/db.js'
 import type { Product } from '../interfaces/product.interface.js';
 
 interface CategoryParams {
   category: string;
 }
-
-interface CategoryParams {
-  category: string;
-}
-
 interface CategoryRow {
   id: number;
 }
