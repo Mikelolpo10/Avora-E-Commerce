@@ -6,8 +6,8 @@
 
 @theme {
   --color-primary: #101b2f;
-  --color-secondary: #d9d0c1;
-  --color-accent: #F6EDE3;
+  --color-secondary: #c8a35c;
+  --color-accent: #f0e6d6;
   --color-background: #ffffff;
 
   --color-gray: #FCFCFC;
@@ -17,9 +17,7 @@
 
   --font-sans: "poppins", sans-serif;
   --font-luxury: "Cormorant Garamond", serif;
-}
-
-;
+};
 
 @layer base {
   input[type="number"]::-webkit-outer-spin-button,
