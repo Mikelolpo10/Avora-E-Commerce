@@ -3,36 +3,14 @@ import { useState } from "react"
 
 interface SortProps {
   openSort: boolean;
+  sortOptions: {
+    name: string;
+    value: string;
+  }[];
 }
 
-export default function SortDropdown({openSort}: SortProps) {
+export default function SortDropdown({ openSort, sortOptions }: SortProps) {
   const [sortBy, setSortBy] = useState<string>('best-match')
-  const sortOptions = [
-    {
-      name: 'Best Match',
-      value: 'best-match',
-    },
-    {
-      name: 'Price: Lowest To Highest',
-      value: 'price-low-high',
-    },
-    {
-      name: 'Price: Highest To Lowest',
-      value: 'price-high-low',
-    },
-    {
-      name: 'Most Popular',
-      value: 'most-popular',
-    },
-    {
-      name: 'Highest Rating',
-      value: 'highest-rating',
-    },
-    {
-      name: 'Most Reviews',
-      value: 'most-reviews',
-    },
-  ]
 
   const selectedSort = sortOptions.find(
     option => option.value === sortBy

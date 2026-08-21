@@ -1,7 +1,6 @@
-import { type Dispatch, type SetStateAction, useState, useRef } from "react";
-import SortDropdown from "./SortDropdown";
+import { type Dispatch, type SetStateAction } from "react";
 import FilterModal from "./FilterModal";
-import useCloseRef from "../../hooks/useCloseRef";
+import SortButton from "@/components/common/SortButton";
 
 interface ToolbarProps {
   openFilter: boolean;
@@ -9,25 +8,38 @@ interface ToolbarProps {
 }
 
 export default function Toolbar({ openFilter, setOpenFilter }: ToolbarProps) {
-  const sortRef = useRef<HTMLDivElement>(null)
-  const [openSort, setOpenSort] = useState<boolean>(false)
-
-  useCloseRef({
-    ref: sortRef,
-    setter: setOpenSort
-  })
+  const sortOptions = [
+    {
+      name: 'Best Match',
+      value: 'best-match',
+    },
+    {
+      name: 'Price: Lowest To Highest',
+      value: 'price-low-high',
+    },
+    {
+      name: 'Price: Highest To Lowest',
+      value: 'price-high-low',
+    },
+    {
+      name: 'Most Popular',
+      value: 'most-popular',
+    },
+    {
+      name: 'Highest Rating',
+      value: 'highest-rating',
+    },
+    {
+      name: 'Most Reviews',
+      value: 'most-reviews',
+    },
+  ]
 
   return (
     <div className="my-4 flex items-center font-medium">
       <span className="mr-auto text-gray-800 text-sm">1234 Results</span>
 
-      <div
-        onClick={() => setOpenSort(!openSort)}
-        ref={sortRef}
-        className="relative mr-4 flex items-center gap-1 cursor-pointer select-none hover:underline hover:underline-offset-2"
-      >
-        <SortDropdown openSort={openSort} />
-      </div>
+      <SortButton sortOptions={sortOptions} />
 
       <FilterModal openFilter={openFilter} setOpenFilter={setOpenFilter} />
     </div>
