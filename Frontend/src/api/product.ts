@@ -1,13 +1,13 @@
 import axios from "axios";
 import { API_URL } from "../config/env";
-import type { Product } from "../interfaces/product.interface";
+import type { Product, ProductWithCategory } from "../interfaces/product.interface";
 
 
-export async function getProductBySlug(slug: string): Promise<Product> {
+export async function getProductBySlug(slug: string): Promise<ProductWithCategory> {
   if (!slug) throw new Error("Product ID is required");
 
   try {
-    const res = await axios.get<Product>(`${API_URL}/browse/products/${slug}`)
+    const res = await axios.get<ProductWithCategory>(`${API_URL}/browse/products/${slug}`)
     return res.data
   } catch (err) {
     throw new Error(`Error while fetching ${slug}`, {
