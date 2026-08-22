@@ -97,7 +97,7 @@ export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) 
 
   return (
     <>
-      <div onClick={() => setOpenFilter(true)} className="flex items-center gap-2 cursor-pointer select-none">
+      <div onClick={() => setOpenFilter(true)} className="flex items-center gap-2 text-sm cursor-pointer select-none">
         <SlidersHorizontal size={20} />
         Filter
       </div>
