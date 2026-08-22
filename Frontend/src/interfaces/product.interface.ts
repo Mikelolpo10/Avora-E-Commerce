@@ -18,10 +18,6 @@ export interface Product {
   perawatan: string;
 }
 
-export interface ProductWithCategory extends Product {
-  category_name: string;
-}
-
 export interface TopSellerProductData {
   name: string;
   img: string;

@@ -1,4 +1,4 @@
-type department = "women" | "man" | "unisex"
+type gender = "women" | "man" | "unisex"
 type status = "active" | "inactive" | "draft"
 
 
@@ -9,15 +9,9 @@ export interface Product {
   slug: string;
   image_url: string;
   description: string;
-  department: department;
+  gender: gender;
   material: string;
   status: status;
   created_at: string;
   updated_at: string;
-  price: number;
-  perawatan: string;
-}
-
-export interface ProductWithCategory extends Product {
-  category_name: string;
 }
