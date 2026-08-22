@@ -1,16 +1,18 @@
-import { ArrowLeft, ArrowRight, Star } from "lucide-react"
-import { useParams } from "react-router"
+import { ArrowLeft, ArrowRight, Star, ThumbsUp } from "lucide-react"
+import { useParams, Link } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
+import { API_URL } from "@/config/env"
+import type { Product } from "@/interfaces/product.interface"
+import { getProductBySlug, getSimilarProducts } from "@/api/product"
 import ProductDetails from "./ProductDetails"
 import SimilarProducts from "./SimilarProducts"
-import Divider from "../../components/common/Divider"
-import { type Product } from "../../interfaces/product.interface"
-import { API_URL } from "../../config/env"
-import { getProductBySlug, getSimilarProducts } from "../../api/product"
+import Divider from "components/common/Divider"
+import SortButton from "components/common/SortButton"
+import ErrorPage from "components/ErrorPage"
 import ProductPageSkeleton from "./ProductPageSkeleton"
-import ErrorPage from "../../components/ErrorPage"
+import capitalize from "@/utils/capitalize"
 
 export default function ProductPage() {
   const { productSlug } = useParams()
@@ -26,87 +28,132 @@ export default function ProductPage() {
     enabled: !!productSlug,
   })
 
+  const sortOptions = [
+    {
+      name: 'Most Recent',
+      value: 'most-recent',
+    },
+    {
+      name: 'Highest Rating',
+      value: 'highest-rating',
+    },
+    {
+      name: 'Lowest Rating',
+      value: 'lowest-rating',
+    },
+  ]
+
   if (isError || similarError) return <ErrorPage text="The product you're looking for may have been removed or is no longer available." />
 
   if (isPending) return <ProductPageSkeleton />
 
   return (
     <div className="mt-16 px-24 flex flex-col bg-gray">
-      <div className="pt-8 flex w-full">
-        <div className="flex w-180 h-140">
-          <div className="flex flex-col w-44 gap-4">
-            {[1, 2, 3, 4].map((item, index) => (
+      <div className="pt-8 flex">
+        <div className="flex flex-col w-180 ">
+          <section className="flex h-140">
+            <div className="flex flex-col w-44 gap-4">
+              {[1, 2, 3, 4].map((item, index) => (
+                <div
+                  key={index}
+                  className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center bg-gray-dark w-32 h-32 rounded-xl cursor-pointer`}
+                  onClick={() => setActiveImg(item)}
+                >
+                  <img
+                    src={`${API_URL}${data.image_url}-${item}.webp`}
+                    alt={`${data.image_url}-${item}`}
+                    className="h-full"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="group relative flex w-full bg-gray-dark rounded-2xl">
+              <img
+                src={`${API_URL}${data?.image_url}-${activeImg}.webp`}
+                alt="Thumbnail"
+                className="w-full select-none"
+              />
               <div
-                key={index}
-                className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center bg-gray-dark w-32 h-32 rounded-xl cursor-pointer`}
-                onClick={() => setActiveImg(item)}
+                onClick={() => setActiveImg(activeImg === 1 ? 4 : activeImg - 1)}
+                className="absolute left-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
               >
-                <img
-                  src={`${API_URL}${data.image_url}-${item}.webp`}
-                  alt={`${data.image_url}-${item}`}
-                  className="h-full"
-                />
+                <ArrowLeft />
               </div>
-            ))}
-          </div>
-          <div className="group relative flex w-full bg-gray-dark rounded-2xl">
-            <img
-              src={`${API_URL}${data?.image_url}-${activeImg}.webp`}
-              alt="Thumbnail"
-              className="w-full select-none"
-            />
-            <div
-              onClick={() => setActiveImg(activeImg === 1 ? 4 : activeImg - 1)}
-              className="absolute left-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
-            >
-              <ArrowLeft />
+              <div
+                onClick={() => setActiveImg(activeImg === 4 ? 1 : activeImg + 1)}
+                className="absolute right-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
+              >
+                <ArrowRight />
+              </div>
             </div>
-            <div
-              onClick={() => setActiveImg(activeImg === 4 ? 1 : activeImg + 1)}
-              className="absolute right-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
-            >
-              <ArrowRight />
+          </section>
+
+          {/* REVIEWS */}
+          <section className="mt-12 flex flex-col items-center">
+            <div className="py-4 flex flex-col items-start w-full">
+              <div className="flex justify-between w-full">
+                <h2 className="mb-2 text-primary-black text-2xl font-medium text-shadow-2xs">Reviews</h2>
+                <SortButton sortOptions={sortOptions} />
+              </div>
+              <div className="relative flex items-center gap-0.5">
+                <div className="flex">
+                  <Star fill="#101b2f" size={18} strokeWidth={0} />
+                  <Star fill="#101b2f" size={18} strokeWidth={0} />
+                  <Star fill="#101b2f" size={18} strokeWidth={0} />
+                  <Star fill="#101b2f" size={18} strokeWidth={0} />
+                  <Star fill="#101b2f" size={18} strokeWidth={0} />
+                </div>
+                <strong className="text-lg font-semibold">4.9</strong>
+                {/* Bikin bisa diklik or smtg */}
+                <span className="text-blue-500 text-sm cursor-pointer">(99+)</span>
+              </div>
             </div>
-          </div>
+
+            <div className="flex flex-col">
+              <Divider color="ash" />
+              {[1, 2, 3].map(() => (
+                <div className="py-4 flex h-80 flex-col gap-4">
+                  <div className="flex justify-between text-lg">
+                    <h2>Very good</h2>
+                    <span className="text-ash text-sm">18/09/2025</span>
+                  </div>
+                  <div className="flex items-start">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} fill="primary" size={18} strokeWidth={0} />
+                    ))}
+                  </div>
+                  <div>
+                    <p>Size Purchased: XL</p>
+                    <p>Color Purchased: Black</p>
+                  </div>
+                  <p className="text-[15px]">
+                    It feels like wearing nothing at all, yet provides the perfect gentle support. The fabric is impossibly soft against the skin. A true revelation in daily wear.
+                  </p>
+                  <div className="mt-auto flex w-full items-center justify-between">
+                    <span className="text-ash text-sm font-medium">Timoty {'\u00B7'} Men</span>
+                    <div className="px-4 py-2 flex items-center gap-2 border border-gray-dark rounded-3xl text-sm cursor-pointer select-none">
+                      <ThumbsUp size={18} />
+                      Helpfull 0
+                    </div>
+                  </div>
+                  <Divider color="ash" />
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
         <ProductDetails data={data} />
       </div>
 
+
       <SimilarProducts products={similarProducts} similarPending={similarPending} />
 
-      {/* Mungkin hapus? */}
-      <Divider />
-
-      <section className="flex flex-col items-center">
-        <div className="py-12 flex flex-col items-center">
-          <h2 className="mb-2 text-primary-black text-3xl font-bold text-shadow-2xs">Customer Experience</h2>
-          <span>Discover the luxury of our essentials through the voices of our customers</span>
-        </div>
-
-        <div className="grid grid-cols-3 gap-8">
-          {[1, 2, 3].map(() => (
-            <div className="py-8 px-12 flex h-80 flex-col items-center gap-6 bg-white shadow-md">
-              <div className="flex w-full items-start">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} fill="primary" size={20} strokeWidth={0} />
-                ))}
-              </div>
-              <p className="italic text-lg">
-                "It feels like wearing nothing at all, yet provides the perfect gentle support. The fabric is impossibly soft against the skin. A true revelation in daily wear."
-              </p>
-              <div className="mt-auto flex w-full justify-between text-sm">
-                <span className="text-black font-semibold">Timoty</span>
-                <span className="text-black font-medium italic">Tokopedia</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="my-12 py-3 px-6 border border-primary-black bg-primary text-white text-sm font-medium shadow-2xl cursor-pointer select-none">
-          Read More Reviews
-        </div>
-      </section>
+      <div className="mb-4 text-sm">
+        <Link to='/' className="text-blue-500 hover:underline">Home </Link>
+        /<Link to={`/department/${data.department}`} className="text-blue-500 hover:underline"> {capitalize(data.department)} </Link>
+        /<span> {capitalize(data.name)}</span>
+      </div>
     </div>
   )
 }

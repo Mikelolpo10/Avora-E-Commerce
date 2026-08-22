@@ -1,6 +1,6 @@
 const colorMap = {
   black: 'before:bg-black',
-  ash: 'before:bg-[#707070]', // atau warna custom kamu
+  ash: 'before:bg-[#707070]',
   white: 'before:bg-white',
   // tambah sesuai kebutuhan
 }

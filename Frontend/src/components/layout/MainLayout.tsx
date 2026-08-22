@@ -6,7 +6,7 @@ import Footer from "./Footer";
 export default function MainLayout() {
   return (
     <>
-      <div className="flex flex-col overflow-hidden">
+      <div className="flex flex-col">
         <div className="px-24 h-8 w-full flex bg-primary overflow-x-hidden">
           <motion.div
             className="flex w-full items-center justify-end text-white text-sm font-medium"
