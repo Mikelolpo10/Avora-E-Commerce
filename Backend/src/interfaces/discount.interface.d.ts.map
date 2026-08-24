@@ -1,0 +1,1 @@
+{"version":3,"file":"discount.interface.d.ts","sourceRoot":"","sources":["discount.interface.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,wBAAwB,CAAC;AAGtD,MAAM,WAAW,QAAS,SAAQ,OAAO;IACvC,oBAAoB,EAAE,MAAM,CAAC;IAC7B,YAAY,EAAE,MAAM,CAAC;IACrB,UAAU,EAAE,MAAM,CAAC;IACnB,QAAQ,EAAE,MAAM,CAAC;IACjB,QAAQ,EAAE,MAAM,CAAC;IACjB,MAAM,EAAE,MAAM,CAAC;CAChB"}

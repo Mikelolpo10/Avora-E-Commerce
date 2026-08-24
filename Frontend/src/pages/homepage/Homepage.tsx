@@ -13,7 +13,7 @@ export default function Homepage() {
       <div className="mt-16 w-full flex flex-col bg-gray">
         <section className="relative px-16 w-full flex min-w-0 min-h-0">
           <h1 className="absolute top-16 left-[50%] text-primary text-4xl font-semibold translate-x-[-50%]">Made To Last, Made For You.</h1>
-          <img src={mainAds} alt="" className="" />
+          <img src={mainAds} alt="" fetchPriority="high" />
         </section>
 
         <TopSeller />
