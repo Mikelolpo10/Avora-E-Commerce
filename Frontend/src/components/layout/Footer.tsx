@@ -1,7 +1,7 @@
 import { Link } from "react-router"
-import location from '@/assets/location.png'
-import whatsapp from '@/assets/whatsapp.png'
-import email from '@/assets/email.png'
+import location from '@/assets/location.webp'
+import whatsapp from '@/assets/whatsapp.webp'
+import email from '@/assets/email.webp'
 
 const footerSections = [
     {

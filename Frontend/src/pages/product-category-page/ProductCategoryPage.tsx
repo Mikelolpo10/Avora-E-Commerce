@@ -50,7 +50,7 @@ export default function ProductCategoryPage() {
 
         <Toolbar openFilter={openFilter} setOpenFilter={setOpenFilter} />
 
-        <div className="mb-8 grid grid-cols-4 auto-rows-96">
+        <div className="mb-8 grid grid-cols-4 auto-rows-96 gap-y-8">
           {isPending ? (
             Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={index} />

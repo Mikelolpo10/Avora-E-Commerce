@@ -1,6 +1,6 @@
 import { NavLink, Link } from "react-router";
 import { useState, useEffect } from "react";
-import brandName from '@/assets/brand-name.png'
+import brandName from '@/assets/brand-name.webp'
 
 const navItems = [
   { name: 'NEW ARRIVAL', path: '/new_arrival' },

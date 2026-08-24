@@ -2,10 +2,10 @@ import { Link } from "react-router";
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
 import ProductCategories from "./ProductCategories";
-import mainAds from '../../assets/main_ads.png'
-import blibli from '../../assets/logo/blibli.png'
-import tokopedia from '../../assets/logo/tokopedia.png'
-import shopee from '../../assets/logo/shopee.png'
+import mainAds from '@/assets/main_ads.webp'
+import blibli from '@/assets/logo/blibli.webp'
+import tokopedia from '@/assets/logo/tokopedia.webp'
+import shopee from '@/assets/logo/shopee.webp'
 
 export default function Homepage() {
   return (

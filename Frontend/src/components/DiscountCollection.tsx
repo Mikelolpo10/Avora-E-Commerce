@@ -42,7 +42,7 @@ export default function DiscountColection({ title, slug, products }: DiscountCol
             className="flex flex-col items-center hover:border"
           >
             <div className="relative flex items-center overflow-hidden">
-              <img src={`${API_URL}${image_url}-1.png`} alt={image_url} className="bg-gray-dark transition-all duration-200 hover:scale-105 hover:brightness-90" />
+              <img src={`${API_URL}${image_url}-1.webp`} alt={image_url} className="bg-gray-dark transition-all duration-200 hover:scale-105 hover:brightness-90" />
               <div className="absolute top-0 right-0 py-2 px-2 flex text-center w-12 bg-red-700 text-sm text-white font-semibold">{discount}% Off</div>
             </div>
 

@@ -17,8 +17,13 @@ export default function ProductCard({ name, slug, image_url, price, lazy }: Prod
       to={`/products/${slug}`}
       className="max-h-120 flex flex-col"
     >
-      <div className="relative flex min-h-[60%] items-center overflow-hidden bg-gray-dark ">
-        <img loading={lazy ? 'lazy' : 'eager'} src={`${API_URL}${image_url}-1.webp`} alt={name} className="transition-all duration-200 hover:scale-105 hover:brightness-90" />
+      <div className="relative flex min-h-[60%] items-center justify-center overflow-hidden bg-[#f0f0f0]">
+        <img
+          loading={lazy ? 'lazy' : 'eager'}
+          src={`${API_URL}${image_url}-1.webp`}
+          alt={name}
+          className="h-full transition-all duration-200 hover:scale-105 hover:brightness-90"
+        />
       </div>
 
       <div className="pt-3 flex flex-col gap-0.5">
