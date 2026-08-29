@@ -47,29 +47,70 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
 
 
 export const getProductBySlug = async (req: Request, res: Response) => {
-  const productSlug = req.params.productSlug
-
-  if (!productSlug) return res.status(404).json(`product slug is required`)
+  const { productSlug } = req.params;
 
   if (!productSlug) {
     return res.status(400).json({
-      message: "Invalid product slug",
+      message: "Product slug is required",
     });
   }
 
   try {
-    const result = await pool.query<Product>('SELECT * FROM products WHERE slug = $1', [productSlug])
+    const result = await pool.query(
+      `
+      SELECT 
+        p.*,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pv.id,
+              'sku', pv.sku,
+              'size', pv.size,
+              'color', pv.color,
+              'price', pv.price,
+              'stock', pv.stock,
+              'is_default', pv.is_default
+            )
+            ORDER BY pv.color, 
+              CASE pv.size
+                WHEN 'S' THEN 1
+                WHEN 'M' THEN 2
+                WHEN 'L' THEN 3
+                WHEN 'XL' THEN 4
+                WHEN 'XXL' THEN 5
+              END
+          ) FILTER (WHERE pv.id IS NOT NULL),
+          '[]'
+        ) AS variants
+
+      FROM products p
+
+      LEFT JOIN product_variants pv
+        ON pv.product_id = p.id
+
+      WHERE p.slug = $1
+
+      GROUP BY p.id
+      `,
+      [productSlug]
+    );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({
+        message: "Product not found",
+      });
     }
 
-    return res.status(200).json(result.rows[0])
+    return res.status(200).json(result.rows[0]);
+
   } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: 'Internal server error' })
+    console.error(err);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
-}
+};
 
 export const getSimilarProducts = async (req: Request, res: Response) => {
   const slug = req.params.productSlug;
