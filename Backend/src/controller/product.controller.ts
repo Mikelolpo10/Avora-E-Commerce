@@ -66,12 +66,14 @@ export const getProductBySlug = async (req: Request, res: Response) => {
               'id', pv.id,
               'sku', pv.sku,
               'size', pv.size,
-              'color', pv.color,
+              'color_name', pv.color_name,
+              'color_code', pv.color_code,
               'price', pv.price,
               'stock', pv.stock,
               'is_default', pv.is_default
             )
-            ORDER BY pv.color, 
+            ORDER BY 
+              pv.color_name,
               CASE pv.size
                 WHEN 'S' THEN 1
                 WHEN 'M' THEN 2
