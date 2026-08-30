@@ -56,32 +56,37 @@ export default function ProductPage() {
               {[1, 2, 3, 4].map((item, index) => (
                 <div
                   key={index}
-                  className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center bg-gray-dark w-32 h-32 rounded-xl cursor-pointer`}
+                  className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center justify-center bg-gray-dark w-32 h-32 cursor-pointer`}
                   onClick={() => setActiveImg(item)}
                 >
                   <img
                     src={`${API_URL}${data.image_url}-${item}.webp`}
                     alt={`${data.image_url}-${item}`}
+                    fetchPriority="high"
                     className="h-full"
                   />
                 </div>
               ))}
             </div>
-            <div className="group relative flex w-full bg-gray-dark rounded-2xl">
+            <div className="group relative flex w-full h-150 justify-center bg-gray-dark overflow-hidden">
               <img
                 src={`${API_URL}${data?.image_url}-${activeImg}.webp`}
                 alt="Thumbnail"
-                className="w-full select-none"
+                width={250}
+                height={600}
+                className="w-full h-full object-contain select-none"
               />
+
               <div
                 onClick={() => setActiveImg(activeImg === 1 ? 4 : activeImg - 1)}
-                className="absolute left-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
+                className="absolute left-4 top-1/2 -translate-y-1/2 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <ArrowLeft />
               </div>
+
               <div
                 onClick={() => setActiveImg(activeImg === 4 ? 1 : activeImg + 1)}
-                className="absolute right-4 top-[50%] group-hover:opacity-100 opacity-0 flex items-center justify-center w-12 bg-white rounded-full aspect-square shadow translate-y-[-50%] transition-opacity cursor-pointer"
+                className="absolute right-4 top-1/2 -translate-y-1/2 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-full bg-white shadow opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <ArrowRight />
               </div>
@@ -111,8 +116,8 @@ export default function ProductPage() {
 
             <div className="flex flex-col">
               <Divider color="ash" />
-              {[1, 2, 3].map(() => (
-                <div className="py-4 flex h-80 flex-col gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="py-4 flex h-80 flex-col gap-4">
                   <div className="flex justify-between text-lg">
                     <h2>Very good</h2>
                     <span className="text-ash text-sm">18/09/2025</span>

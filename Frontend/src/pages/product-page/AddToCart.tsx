@@ -1,7 +1,12 @@
+import type { Variant } from "@/interfaces/product.interface"
 import { Minus, Plus, ExternalLink, Heart } from "lucide-react"
 import { useState, type ChangeEvent } from "react"
 
-export default function AddToCart() {
+interface AddToCartProps {
+  activeVariant: Variant;
+}
+
+export default function AddToCart({ activeVariant }: AddToCartProps) {
   const [quantity, setQuantity] = useState<number>(1)
 
   function handleQuantity(e: ChangeEvent<HTMLInputElement>) {
@@ -9,6 +14,8 @@ export default function AddToCart() {
 
     if (value === 0) {
       setQuantity(1)
+    } else if (value > activeVariant.stock) {
+      setQuantity(activeVariant.stock)
     } else {
       setQuantity(value)
     }
@@ -18,7 +25,9 @@ export default function AddToCart() {
     if (op === '-') {
       if (quantity > 1) setQuantity(quantity - 1)
     } else {
-      setQuantity(quantity + 1)
+      if (quantity < activeVariant.stock) {
+        setQuantity(quantity + 1)
+      }
     }
   }
 
@@ -50,7 +59,7 @@ export default function AddToCart() {
       </div>
       <div className="flex">
         <div className="mr-4 p-2 flex items-center justify-center rounded-full border border-ash cursor-pointer aspect-square">
-          <ExternalLink color="#707070" size={22} strokeWidth={2} />
+          <ExternalLink color="#101b2f" size={22} strokeWidth={2} />
         </div>
         <button className="py-2 flex w-full justify-center gap-2 border text-primary font-semibold cursor-pointer">
           <Heart strokeWidth={2} />Add To Wishlist

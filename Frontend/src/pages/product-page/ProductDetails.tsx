@@ -8,6 +8,7 @@ import AddToCart from "./AddToCart"
 
 import { type Product } from "../../interfaces/product.interface"
 import DescriptionDropdown from "./DescriptionDropdown"
+import { useState } from "react"
 
 interface ProductDetailsProps {
   data: Product;
@@ -15,6 +16,13 @@ interface ProductDetailsProps {
 
 
 export default function ProductDetails({ data }: ProductDetailsProps) {
+  const [activeVariant, setActiveVariant] = useState(data.variants?.find(({ is_default }) => is_default === true))
+  const stock = activeVariant?.stock ?? 0;
+
+  if (!activeVariant) {
+    return null; 
+  }
+
   return (
     <div className="sticky top-20 self-start pl-8 flex flex-1 flex-col gap-3">
       <h1 className="text-3xl font-bold">{data?.name}</h1>
@@ -36,11 +44,27 @@ export default function ProductDetails({ data }: ProductDetailsProps) {
 
       <Divider />
 
-      <ColorOptions />
+      <ColorOptions data={data} activeVariant={activeVariant} setActiveVariant={setActiveVariant} />
 
-      <SizeOptions />
+      <SizeOptions data={data} activeVariant={activeVariant} setActiveVariant={setActiveVariant} />
 
-      <AddToCart />
+      {stock > 5 ? (
+        <small className="ml-1 text-[14px] text-primary">
+          In Stock ·{" "}
+          <span className="font-semibold">{stock}</span> left
+        </small>
+      ) : stock > 0 ? (
+        <small className="ml-1 text-[14px] text-red-600">
+          Only{" "}
+          <span className="font-semibold">{stock}</span> left
+        </small>
+      ) : (
+        <small className="ml-1 text-[14px] text-gray-500">
+          Out of Stock
+        </small>
+      )}
+
+      <AddToCart activeVariant={activeVariant} />
 
       <div className="mt-4 flex flex-col gap-3">
         <DescriptionDropdown title="Care Instructions" body={data.perawatan} />

@@ -1,45 +1,39 @@
 import { Link } from "react-router";
-import { useState } from "react"
+import { type Dispatch, type SetStateAction } from "react"
 import { RulerDimensionLine } from "lucide-react";
+import type { Product, Variant } from "@/interfaces/product.interface";
 
-interface SizeOption {
-  size: string;
-  active: boolean;
+
+interface SizeOptionsProps {
+  data: Product;
+  activeVariant: Variant;
+  setActiveVariant: Dispatch<SetStateAction<Variant | undefined>>
 }
 
-export default function SizeOptions() {
-  const [sizeOptions, setSizeOptions] = useState<SizeOption[]>([
-    { size: 'S', active: true },
-    { size: 'M', active: false },
-    { size: 'L', active: false },
-    { size: 'XL', active: false },
-    { size: 'XXL', active: false },
-  ])
-  const selectedSize = sizeOptions.find((size) => size.active)
+export default function SizeOptions({ data, activeVariant, setActiveVariant }: SizeOptionsProps) {
+  const sizeOptions: Variant[] = Array.from(
+    new Map((data.variants ?? []).map((v) => [v.size, v])).values()
+  );
 
-  function changeSize(index: number) {
-    const selectedSize = sizeOptions[index]
+  function changeSize(newSize: string) {
+    const matchedVariant = data.variants?.find(
+      (v: Variant) => v.size === newSize && v.color_name === activeVariant?.color_name
+    );
 
-    if (selectedSize.active === false) {
-      setSizeOptions((prev) =>
-        prev.map((item) =>
-          item.size === selectedSize.size
-            ? { ...item, active: true }
-            : { ...item, active: false }
-        )
-      )
+    if (matchedVariant) {
+      setActiveVariant(matchedVariant);
     }
   }
 
   return (
     <div>
-      <span className="text-primary-black text-sm font-semibold">Size: {selectedSize?.size}</span>
+      <span className="text-primary-black text-sm font-semibold">Size: {activeVariant?.size}</span>
       <div className="flex gap-2">
-        {sizeOptions.map(({ size, active }, index) => (
+        {sizeOptions.map(({ size }) => (
           <div
             key={size}
-            onClick={() => changeSize(index)}
-            className={`${active ? 'bg-primary text-white border-0' : 'border-2'} p-0.5 w-8 h-8 border-ash rounded-xs cursor-pointer`}
+            onClick={() => changeSize(size)}
+            className={`${size === activeVariant?.size ? 'bg-primary text-white border-0' : 'border-2'} p-0.5 w-8 h-8 border-ash rounded-xs cursor-pointer select-none`}
           >
             <div className='flex items-center justify-center w-full h-full text-sm'>{size}</div>
           </div>
