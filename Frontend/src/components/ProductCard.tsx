@@ -17,7 +17,7 @@ export default function ProductCard({ name, slug, image_url, price, lazy }: Prod
       to={`/products/${slug}`}
       className="max-h-120 flex flex-col"
     >
-      <div className="relative flex min-h-[60%] items-center justify-center overflow-hidden bg-[#f0f0f0]">
+      <div className="relative flex min-h-[60%] items-center justify-center overflow-hidden bg-gray-dark">
         <img
           loading={lazy ? 'lazy' : 'eager'}
           src={`${API_URL}${image_url}-1.webp`}
