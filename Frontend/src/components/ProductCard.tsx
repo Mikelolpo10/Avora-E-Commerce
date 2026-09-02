@@ -15,14 +15,14 @@ export default function ProductCard({ name, slug, image_url, price, lazy }: Prod
   return (
     <Link
       to={`/products/${slug}`}
-      className="max-h-120 flex flex-col"
+      className="group flex flex-col"
     >
       <div className="relative flex min-h-[60%] items-center justify-center overflow-hidden bg-gray-dark">
         <img
           loading={lazy ? 'lazy' : 'eager'}
           src={`${API_URL}${image_url}-1.webp`}
           alt={name}
-          className="h-full transition-all duration-200 hover:scale-105 hover:brightness-90"
+          className="h-full object-contain transition-all duration-200 group-hover:scale-105 group-hover:brightness-90"
         />
       </div>
 

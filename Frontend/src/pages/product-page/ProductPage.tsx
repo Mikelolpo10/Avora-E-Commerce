@@ -63,8 +63,6 @@ export default function ProductPage() {
                     src={`${API_URL}${data.image_url}-${item}.webp`}
                     alt={`${data.image_url}-${item}`}
                     fetchPriority="high"
-                    // width={80}
-                    // height={80}
                     className="w-full h-full object-contain"
                   />
                 </div>
