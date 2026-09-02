@@ -51,29 +51,31 @@ export default function ProductPage() {
     <div className="mt-16 px-24 flex flex-col bg-gray">
       <div className="pt-8 flex">
         <div className="flex flex-col w-180 ">
-          <section className="flex h-140">
-            <div className="flex flex-col w-44 gap-4">
+          <section className="flex h-148">
+            <div className="mr-4 flex h-148 w-40 flex-col gap-4">
               {[1, 2, 3, 4].map((item, index) => (
                 <div
                   key={index}
-                  className={`${activeImg === item && 'border-2 border-ash'} select-none flex items-center justify-center bg-gray-dark w-32 h-32 cursor-pointer`}
+                  className={`${activeImg === item && 'border-2 border-ash'} flex flex-1 min-w-0 min-h-0 justify-center bg-gray-dark cursor-pointer select-none`}
                   onClick={() => setActiveImg(item)}
                 >
                   <img
                     src={`${API_URL}${data.image_url}-${item}.webp`}
                     alt={`${data.image_url}-${item}`}
                     fetchPriority="high"
-                    className="h-full"
+                    // width={80}
+                    // height={80}
+                    className="w-full h-full object-contain"
                   />
                 </div>
               ))}
             </div>
-            <div className="group relative flex w-full h-150 justify-center bg-gray-dark overflow-hidden">
+            <div className="group relative flex w-148 h-148 justify-center bg-gray-dark overflow-hidden">
               <img
                 src={`${API_URL}${data?.image_url}-${activeImg}.webp`}
                 alt="Thumbnail"
-                width={250}
-                height={600}
+                width={1000}
+                height={1000}
                 className="w-full h-full object-contain select-none"
               />
 

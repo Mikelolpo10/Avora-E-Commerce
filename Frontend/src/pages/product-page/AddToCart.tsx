@@ -31,6 +31,7 @@ export default function AddToCart({ activeVariant }: AddToCartProps) {
     }
   }
 
+
   return (
     <>
       <div className="mt-2 flex h-12">
@@ -59,7 +60,11 @@ export default function AddToCart({ activeVariant }: AddToCartProps) {
       </div>
       <div className="flex">
         <div className="mr-4 p-2 flex items-center justify-center rounded-full border border-ash cursor-pointer aspect-square">
-          <ExternalLink color="#101b2f" size={22} strokeWidth={2} />
+          <ExternalLink
+            color="#101b2f"
+            size={22}
+            strokeWidth={2} 
+          />
         </div>
         <button className="py-2 flex w-full justify-center gap-2 border text-primary font-semibold cursor-pointer">
           <Heart strokeWidth={2} />Add To Wishlist
