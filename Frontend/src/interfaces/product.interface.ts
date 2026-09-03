@@ -1,5 +1,5 @@
-type department = "women" | "man" | "unisex"
-type status = "active" | "inactive" | "draft"
+export type department = "women" | "man" | "unisex"
+export type status = "active" | "inactive" | "draft"
 
 export interface Variant {
   id: string;
@@ -25,7 +25,7 @@ export interface Product {
   updated_at: string;
   price: number;
   perawatan: string;
-  variants? : Variant[];
+  variants: Variant[];
 }
 
 export interface TopSellerProductData {

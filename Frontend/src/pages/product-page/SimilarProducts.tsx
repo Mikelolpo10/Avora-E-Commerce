@@ -22,13 +22,15 @@ export default function SimilarProducts({ products, similarPending }: SimilarPro
             <ProductCardSkeleton key={index} />
           ))
         ) : (
-          products?.map(({ id, name, slug, image_url, price }) => (
+          products?.map(({ id, name, slug, department, image_url, price, variants }) => (
             <ProductCard
               key={id}
               name={name}
               slug={slug}
+              department={department}
               image_url={image_url}
               price={price}
+              variants={variants}
               lazy={true}
             />
           ))

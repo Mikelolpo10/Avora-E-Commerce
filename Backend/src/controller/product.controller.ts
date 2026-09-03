@@ -38,12 +38,53 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
   const department = departmentParam.toLocaleLowerCase();
 
   try {
-    const result = await pool.query<Product[]>('SELECT * FROM products WHERE department = $1', [department])
-    res.status(200).json(result.rows)
+    const result = await pool.query(
+      `
+      SELECT 
+        p.*,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pv.id,
+              'sku', pv.sku,
+              'size', pv.size,
+              'color_name', pv.color_name,
+              'color_code', pv.color_code,
+              'price', pv.price,
+              'stock', pv.stock,
+              'is_default', pv.is_default
+            )
+            ORDER BY 
+              pv.color_name,
+              CASE pv.size
+                WHEN 'S' THEN 1
+                WHEN 'M' THEN 2
+                WHEN 'L' THEN 3
+                WHEN 'XL' THEN 4
+                WHEN 'XXL' THEN 5
+              END
+          ) FILTER (WHERE pv.id IS NOT NULL),
+          '[]'
+        ) AS variants
+
+      FROM products p
+
+      LEFT JOIN product_variants pv
+        ON pv.product_id = p.id
+
+      WHERE p.department = $1
+
+      GROUP BY p.id
+      `,
+      [department]
+    );
+
+    res.status(200).json(result.rows);
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' })
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
 
 
 export const getProductBySlug = async (req: Request, res: Response) => {
@@ -115,7 +156,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
 };
 
 export const getSimilarProducts = async (req: Request, res: Response) => {
-  const slug = req.params.productSlug;
+  const { productSlug } = req.params;
 
   const productResult = await pool.query(
     `
@@ -123,33 +164,82 @@ export const getSimilarProducts = async (req: Request, res: Response) => {
     FROM products
     WHERE slug = $1
     `,
-    [slug]
+    [productSlug]
   );
 
   if (productResult.rows.length === 0) {
     return res.status(404).json({
-      message: "Product not found"
+      message: "Product not found",
     });
   }
 
   const product = productResult.rows[0];
+
   const result = await pool.query(
     `
-    SELECT *,
+    SELECT 
+      p.*,
+
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'id', pv.id,
+            'sku', pv.sku,
+            'size', pv.size,
+            'color_name', pv.color_name,
+            'color_code', pv.color_code,
+            'price', pv.price,
+            'stock', pv.stock,
+            'is_default', pv.is_default
+          )
+          ORDER BY 
+            pv.color_name,
+            CASE pv.size
+              WHEN 'S' THEN 1
+              WHEN 'M' THEN 2
+              WHEN 'L' THEN 3
+              WHEN 'XL' THEN 4
+              WHEN 'XXL' THEN 5
+            END
+        ) FILTER (WHERE pv.id IS NOT NULL),
+        '[]'
+      ) AS variants,
+
       (
-        CASE WHEN category_id = $1 THEN 50 ELSE 0 END +
-        CASE WHEN department = $2 THEN 20 ELSE 0 END +
-        CASE WHEN material = $3 THEN 20 ELSE 0 END +
+        CASE 
+          WHEN p.category_id = $1 THEN 50 
+          ELSE 0 
+        END +
+
+        CASE 
+          WHEN p.department = $2 THEN 20 
+          ELSE 0 
+        END +
+
+        CASE 
+          WHEN p.material = $3 THEN 20 
+          ELSE 0 
+        END +
+
         CASE
-          WHEN price BETWEEN $4 * 0.8 AND $4 * 1.2
+          WHEN p.price BETWEEN $4 * 0.8 AND $4 * 1.2
           THEN 10
           ELSE 0
         END
       ) AS similarity_score
-    FROM products
-    WHERE slug != $5
-      AND status = 'active'
+
+    FROM products p
+
+    LEFT JOIN product_variants pv
+      ON pv.product_id = p.id
+
+    WHERE p.slug != $5
+      AND p.status = 'active'
+
+    GROUP BY p.id
+
     ORDER BY similarity_score DESC
+
     LIMIT 6;
     `,
     [
@@ -157,9 +247,9 @@ export const getSimilarProducts = async (req: Request, res: Response) => {
       product.department,
       product.material,
       product.price,
-      slug
+      productSlug,
     ]
   );
 
-  res.json(result.rows);
-}
+  return res.status(200).json(result.rows);
+};

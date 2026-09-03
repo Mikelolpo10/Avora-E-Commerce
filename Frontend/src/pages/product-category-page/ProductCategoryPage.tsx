@@ -43,24 +43,26 @@ export default function ProductCategoryPage() {
 
   return (
     <>
-      <div className="relative mt-16 px-24 flex flex-col">
+      <div className="relative mt-16 px-32 flex flex-col">
         <h1 className="mt-16 mb-4 text-2xl font-medium">{capitalize(department)}'s Collection</h1>
 
         <Divider />
 
         <Toolbar openFilter={openFilter} setOpenFilter={setOpenFilter} />
 
-        <div className="mb-8 grid grid-cols-4 auto-rows-96 gap-y-8">
+        <div className="mb-8 grid grid-cols-4 auto-rows-84 gap-y-16">
           {isPending ? (
             Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))
           ) : (
-            data.map(({ id, name, slug, image_url, price }) => (
+            data.map(({ id, name, slug, department, image_url, price, variants }) => (
               <ProductCard
                 key={id}
                 name={name}
                 slug={slug}
+                department={department}
+                variants={variants}
                 image_url={image_url}
                 price={price}
                 lazy={false}
