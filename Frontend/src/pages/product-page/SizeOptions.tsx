@@ -39,7 +39,7 @@ export default function SizeOptions({ data, activeVariant, setActiveVariant }: S
           </div>
         ))}
       </div>
-      <Link to="/help/size-guide" className="mt-3 flex items-center gap-1 text-blue-600 text-sm"><RulerDimensionLine size={20} /> Size Guide</Link>
+      <Link to="/help/size-guide" className="mt-3 flex w-fit items-center gap-1 text-blue-600 text-sm"><RulerDimensionLine size={20} /> Size Guide</Link>
     </div>
   )
 }
