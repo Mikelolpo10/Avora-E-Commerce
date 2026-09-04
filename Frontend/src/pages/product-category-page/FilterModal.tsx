@@ -120,7 +120,6 @@ export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) 
                 </div>
               </div>
               <div className="mt-4 flex flex-col">
-                {/* Maybe tambahin garis antar setiap selection saat open */}
                 {filterOptions.map((filter) => (
                   <div>
                     <Divider color="ash" />
