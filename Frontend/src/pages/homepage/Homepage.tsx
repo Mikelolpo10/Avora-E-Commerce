@@ -27,7 +27,7 @@ export default function Homepage() {
             </h1>
             <Link
               to='categories'
-              className="mt-8 py-3 px-3 flex w-60 h-12 items-center justify-center rounded bg-primary text-lg font-medium shadow-2xl">
+              className="mt-8 py-3 px-3 flex h-12 items-center justify-center rounded bg-primary text-lg font-medium shadow-2xl">
               Shop Now
             </Link>
           </div>

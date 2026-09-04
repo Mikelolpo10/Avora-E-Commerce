@@ -41,7 +41,7 @@ const helpSection = {
 
 export default function Footer() {
   return (
-    <footer className="bg-accent">
+    <footer className="bg-[#c3e2fa]">
       <div className="
         px-6 py-10
         md:px-12
@@ -62,14 +62,14 @@ export default function Footer() {
           <h3 className="mt-8 text-primary-black text-lg font-bold">Hubungi Kami</h3>
           <div className="mt-4 flex flex-col gap-2">
             <span>Butuh bantuan? Kami siap membantu!</span>
-            <Link to='https://maps.app.goo.gl/fXoTAq765GiKTpPC8' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-primary">
+            <Link to='https://maps.app.goo.gl/fXoTAq765GiKTpPC8' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={location} alt="Location" className="w-8" /> Jl. Kebon kacang III no 4-B Ruko Tanah Abang
             </Link>
             {/* NANTI HAPUS BG LOCATION */}
-            <Link to='' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-primary">
+            <Link to='' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={whatsapp} alt="Whatsapp" className="w-8" /> WA kami di +62 813-8802-0043
             </Link>
-            <Link to='mailto:info@polini.co.id' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-primary">
+            <Link to='mailto:info@polini.co.id' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={email} alt="Email" className="mr-2 w-5" /> Email kami di info@polini.co.id
             </Link>
           </div>
@@ -85,7 +85,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-primary-black transition-colors hover:text-pink-600"
+                      className="text-primary-black transition-colors hover:text-accent"
                     >
                       {link.name}
                     </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
               <li key={link.href}>
                 <Link
                   to={link.href}
-                  className="text-primary-black transition-colors hover:text-pink-600"
+                  className="text-primary-black transition-colors hover:text-accent"
                 >
                   {link.name}
                 </Link>

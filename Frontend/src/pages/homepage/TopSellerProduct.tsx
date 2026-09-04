@@ -33,7 +33,7 @@ export default function TopSellerProduct({ name, img, colors }: TopSellerProduct
           </div>
         ))}
       </div>
-      <h2 className="text-secondary text-xl font-semibold">{name}</h2>
+      <h2 className="text-primary text-xl font-semibold">{name}</h2>
     </div>
   )
 }
