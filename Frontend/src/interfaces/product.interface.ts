@@ -23,8 +23,8 @@ export interface Product {
   status: status;
   created_at: string;
   updated_at: string;
-  price: number;
   perawatan: string;
+  sold_count: number;
   variants: Variant[];
 }
 
