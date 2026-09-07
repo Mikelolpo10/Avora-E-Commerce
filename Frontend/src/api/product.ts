@@ -28,9 +28,9 @@ export async function getProductByCategory(category: string): Promise<Product[]>
   }
 }
 
-export async function getProductsByDepartment(department: string): Promise<Product[]> {
+export async function getProductsByDepartment(department: string, sortBy: string): Promise<Product[]> {
   try {
-    const res = await axios.get<Product[]>(`${API_URL}/browse/products/department/${department}`)
+    const res = await axios.get<Product[]>(`${API_URL}/browse/products/department/${department}?sort=${sortBy}`)
     return res.data
   } catch (err) {
     throw new Error(`Error while fetching ${department}`, {

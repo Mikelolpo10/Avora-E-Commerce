@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useSearchParams } from "react-router";
 import { useState, useEffect } from "react";
 
 import type { Product } from "@/interfaces/product.interface";
@@ -7,18 +7,22 @@ import Divider from 'components/common/Divider';
 import { getProductsByDepartment } from "@/api/product";
 import capitalize from "@/utils/capitalize";
 
-import Toolbar from "./Toolbar";
 import ProductCard from "components/ProductCard";
 import ProductCardSkeleton from "components/ProductCardSkeleton";
-import NotFoundPage from "../../components/ErrorPage";
+import NotFoundPage from "components/ErrorPage";
+import Toolbar from "./Toolbar";
 
 export default function ProductCategoryPage() {
   const { department } = useParams()
   const [openFilter, setOpenFilter] = useState<boolean>(false)
+
+  const [searchParams] = useSearchParams()
+  const sortBy = searchParams.get("sort") || "default"
   const { data, isPending, isError } = useQuery<Product[]>({
-    queryKey: [department],
-    queryFn: () => getProductsByDepartment(department!),
+    queryKey: [department, sortBy],
+    queryFn: () => getProductsByDepartment(department!, sortBy),
     enabled: !!department,
+    retry: 2
   })
 
   useEffect(() => {
@@ -37,9 +41,9 @@ export default function ProductCategoryPage() {
     };
   }, [openFilter]);
 
-  if (!department) return <NotFoundPage />
+  if (!department || isError) return <NotFoundPage />
 
-  if (isError) return <p>Failed to load products.</p>;
+  // if (isError) return <p>Failed to load products.</p>;
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function ProductCategoryPage() {
               <ProductCardSkeleton key={index} />
             ))
           ) : (
-            data.map(({ id, name, slug, department, image_url, price, variants }) => (
+            data.map(({ id, name, slug, department, image_url, variants }) => (
               <ProductCard
                 key={id}
                 name={name}
@@ -64,7 +68,6 @@ export default function ProductCategoryPage() {
                 department={department}
                 variants={variants}
                 image_url={image_url}
-                price={price}
                 lazy={false}
               />
             ))

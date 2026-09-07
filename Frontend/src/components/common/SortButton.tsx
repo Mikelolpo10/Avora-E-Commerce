@@ -1,5 +1,6 @@
 import { useState, useRef } from "react"
 import { ArrowDownUp, ChevronDown } from "lucide-react"
+import { useSearchParams } from "react-router"
 import useCloseRef from "@/hooks/useCloseRef"
 
 interface SortProps {
@@ -11,8 +12,9 @@ interface SortProps {
 
 export default function SortButton({ sortOptions }: SortProps) {
   const sortRef = useRef<HTMLDivElement>(null)
-  const [openSort, setOpenSort] = useState<boolean>(false)
-  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value)
+  const [openSort, setOpenSort] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const sortBy = searchParams.get("sort") || sortOptions[0].value
 
   useCloseRef({
     ref: sortRef,
@@ -23,6 +25,15 @@ export default function SortButton({ sortOptions }: SortProps) {
     option => option.value === sortBy
   )
 
+  const handleSortChange = (value: string) => {
+    setSearchParams(prev => {
+      prev.set("sort", value)
+      return prev
+    })
+
+    setOpenSort(false)
+  }
+
   return (
     <div
       onClick={() => setOpenSort(!openSort)}
@@ -30,7 +41,9 @@ export default function SortButton({ sortOptions }: SortProps) {
       className="relative mr-4 flex items-center gap-1 text-sm text-primary-black cursor-pointer select-none hover:underline hover:underline-offset-2"
     >
       <ArrowDownUp size={20} />
+
       Sort: {selectedSort?.name}
+
       <ChevronDown />
 
       {openSort && (
@@ -39,16 +52,25 @@ export default function SortButton({ sortOptions }: SortProps) {
           className="absolute top-8 right-0 flex flex-col w-60 rounded-2xl bg-white shadow-[0_0_24px_0_rgba(0,0,0,0.20)] overflow-hidden z-10"
         >
           {sortOptions.map(({ name, value }) => (
-            <div key={value} className="px-4 flex h-10 w-full items-center gap-1 bg-white cursor-pointer hover:brightness-95">
+            <div
+              key={value}
+              className="px-4 flex h-10 w-full items-center gap-1 bg-white cursor-pointer hover:brightness-95"
+            >
               <input
                 type="radio"
                 name="sort"
                 value={value}
                 id={value}
                 checked={value === sortBy}
-                onChange={() => setSortBy(value)}
+                onChange={() => handleSortChange(value)}
               />
-              <label htmlFor={value} className={`${value === sortBy && 'underline'} flex items-center h-full w-full`}>
+
+              <label
+                htmlFor={value}
+                className={`${
+                  value === sortBy && "underline"
+                } flex items-center h-full w-full`}
+              >
                 {name}
               </label>
             </div>

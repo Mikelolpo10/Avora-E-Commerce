@@ -10,12 +10,11 @@ interface ProductProps {
   slug: string;
   department: department;
   image_url: string;
-  price: number;
   lazy: boolean;
   variants: Variant[];
 }
 
-export default function ProductCard({ name, slug, department, image_url, price, lazy, variants }: ProductProps) {
+export default function ProductCard({ name, slug, department, image_url, lazy, variants }: ProductProps) {
   const SIZE_ORDER = ['S', 'M', 'L', 'XL', 'XXL'];
 
   function getSizeRange(variants: { size: string }[]) {
@@ -47,7 +46,7 @@ export default function ProductCard({ name, slug, department, image_url, price, 
         <span>{capitalize(department)}, {getSizeRange(variants)}</span>
         <h4 className="truncate">{name}</h4>
         <div className="mt-1 mb-1 flex text-[15px] font-semibold">
-          <span className="text-lg tracking-tighter">{formatRupiah(price)}</span>
+          <span className="text-lg tracking-tighter">{formatRupiah(variants[0].price)}</span>
         </div>
         <div className="flex gap-0.5 text-xs">
           <Star fill="primary" stroke="" size={16} />
