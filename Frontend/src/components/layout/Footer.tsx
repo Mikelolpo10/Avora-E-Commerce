@@ -77,7 +77,7 @@ export default function Footer() {
 
         <div>
           {footerSections.map((section, index) => (
-            <div className={index > 0 ? "mt-8" : ""}>
+            <div key={index} className={index > 0 ? "mt-8" : ""}>
               <h4 className="mb-2 font-semibold">{section.title}</h4>
 
               <ul className="space-y-2 text-[15px]">
