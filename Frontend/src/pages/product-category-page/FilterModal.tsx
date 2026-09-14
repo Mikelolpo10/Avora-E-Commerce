@@ -1,8 +1,9 @@
 import { AnimatePresence, motion, easeOut } from "motion/react";
 import { SlidersHorizontal, X } from "lucide-react";
-import { type Dispatch, type SetStateAction, useReducer, useRef, useMemo } from "react";
+import type { SetURLSearchParams } from "react-router";
+import { type Dispatch, type SetStateAction, useRef, useMemo } from "react";
 
-import type { FilterOptions, FilterAction } from "../../interfaces/filter.interface";
+import type { FilterAction, FilterOptions, CheckedFilter } from "@/interfaces/filter.interface";
 import useCloseRef from "../../hooks/useCloseRef";
 import FilterSelection from "./FilterSelection";
 import Divider from "../../components/common/Divider";
@@ -10,52 +11,15 @@ import Divider from "../../components/common/Divider";
 interface FilterProps {
   openFilter: boolean;
   setOpenFilter: Dispatch<SetStateAction<boolean>>;
+  filterOptions: FilterOptions[];
+  dispatch: Dispatch<FilterAction>;
+  setSearchParams: SetURLSearchParams;
+  checkedFilters: CheckedFilter[];
 }
 
 
-export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) {
-  const filterRef = useRef(null)
-  const [filterOptions, dispatch] = useReducer(changeFilter, [
-    {
-      name: "Category",
-      options: [
-        { name: "Bra", value: "bra", checked: false },
-        { name: "Sportswear", value: "sportswear", checked: false },
-        { name: "Underwear", value: "underwear", checked: false },
-        { name: "Night Wear", value: "night-wear", checked: false },
-      ],
-    },
-    {
-      name: "Price",
-      options: [
-        { name: "Under Rp100.000", value: "0-100000", checked: false },
-        { name: "Rp100.000 - Rp250.000", value: "100000-250000", checked: false },
-        { name: "Rp250.000 - Rp500.000", value: "250000-500000", checked: false },
-        { name: "Above Rp500.000", value: "500000+", checked: false },
-      ],
-    },
-    {
-      name: "Material",
-      options: [
-        { name: "Cotton", value: "cotton", checked: false },
-        { name: "Polyester", value: "polyester", checked: false },
-        { name: "Nylon", value: "nylon", checked: false },
-        { name: "Spandex", value: "spandex", checked: false },
-        { name: "Lace", value: "lace", checked: false },
-      ],
-    },
-    {
-      name: "Size",
-      options: [
-        { name: "XS", value: "xs", checked: false },
-        { name: "S", value: "s", checked: false },
-        { name: "M", value: "m", checked: false },
-        { name: "L", value: "l", checked: false },
-        { name: "XL", value: "xl", checked: false },
-        { name: "XXL", value: "xxl", checked: false },
-      ],
-    },
-  ]);
+export default function FilterModal({ openFilter, setOpenFilter, filterOptions, dispatch, setSearchParams }: FilterProps) {
+  const filterRef = useRef(null);
   const activeFilterCount = useMemo(
     () =>
       filterOptions.reduce(
@@ -65,35 +29,44 @@ export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) 
     [filterOptions]
   );
 
-  function changeFilter(state: FilterOptions[], action: FilterAction): FilterOptions[] {
-    switch (action.type) {
-      case "TOGGLE":
-        return state.map((group) =>
-          group.name !== action.groupName ? group : {
-            ...group,
-            options: group.options.map((opt) =>
-              opt.value !== action.value
-                ? opt
-                : { ...opt, checked: !opt.checked }
-            ),
-          }
-        );
-
-      case "RESET_ALL":
-        return state.map((group) => ({
-          ...group,
-          options: group.options.map((opt) => ({ ...opt, checked: false })),
-        }));
-
-      default:
-        return state;
-    }
-  }
-
   useCloseRef({
     ref: filterRef,
     setter: setOpenFilter
   })
+
+  const handleApplyFilter = () => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      filterOptions.forEach((group) => {
+        const key = group.name.toLowerCase();
+        const checkedOptions = group.options.filter((opt) => opt.checked);
+
+        if (checkedOptions.length === 0) {
+          next.delete(key);
+          return;
+        }
+
+        if (typeof checkedOptions[0].value === "object") {
+          const { min, max } = checkedOptions[0].value as {
+            min: string;
+            max: string;
+          };
+
+          next.set(key, `${min}-${max}`);
+        } else {
+          const values = checkedOptions.map(
+            (opt) => opt.value as string
+          );
+
+          next.set(key, values.join(","));
+        }
+      });
+
+      return next;
+    });
+  };
+
 
   return (
     <>
@@ -121,7 +94,7 @@ export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) 
               </div>
               <div className="mt-4 flex flex-col">
                 {filterOptions.map((filter) => (
-                  <div>
+                  <div key={filter.name}>
                     <Divider color="ash" />
                     <FilterSelection
                       key={filter.name}
@@ -139,7 +112,7 @@ export default function FilterModal({ openFilter, setOpenFilter }: FilterProps) 
                   Reset Filter ({activeFilterCount})
                 </div>
 
-                <div className="py-2 flex w-full justify-center bg-primary text-white select-none cursor-pointer">
+                <div onClick={handleApplyFilter} className="py-2 flex w-full justify-center bg-primary text-white select-none cursor-pointer">
                   Apply Filter
                 </div>
               </div>

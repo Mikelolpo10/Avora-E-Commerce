@@ -1,13 +1,19 @@
 import { type Dispatch, type SetStateAction } from "react";
-import FilterModal from "./FilterModal";
+import type { SetURLSearchParams } from "react-router";
+import type { FilterOptions, FilterAction, CheckedFilter } from "@/interfaces/filter.interface";
 import SortButton from "@/components/common/SortButton";
+import FilterModal from "./FilterModal";
 
 interface ToolbarProps {
   openFilter: boolean;
   setOpenFilter: Dispatch<SetStateAction<boolean>>;
+  filterOptions: FilterOptions[];
+  dispatch: Dispatch<FilterAction>
+  setSearchParams: SetURLSearchParams;
+  checkedFilters: CheckedFilter[];
 }
 
-export default function Toolbar({ openFilter, setOpenFilter }: ToolbarProps) {
+export default function Toolbar({ openFilter, setOpenFilter, filterOptions, dispatch, setSearchParams, checkedFilters }: ToolbarProps) {
   const sortOptions = [
     {
       name: 'Best Match',
@@ -41,7 +47,14 @@ export default function Toolbar({ openFilter, setOpenFilter }: ToolbarProps) {
 
       <SortButton sortOptions={sortOptions} />
 
-      <FilterModal openFilter={openFilter} setOpenFilter={setOpenFilter} />
+      <FilterModal
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+        filterOptions={filterOptions}
+        dispatch={dispatch}
+        setSearchParams={setSearchParams}
+        checkedFilters={checkedFilters}
+      />
     </div>
   )
 }

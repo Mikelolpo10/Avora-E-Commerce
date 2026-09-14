@@ -31,6 +31,10 @@ export const getProductsByCategories = async (req: Request<CategoryParams>, res:
 export const getProductsByDepartment = async (req: Request, res: Response) => {
   const departmentParam = req.params.department as string;
   const sortParam = (req.query.sort as string) || 'best-match';
+  const categoryParam = req.query.category as string | undefined;
+  const materialParam = req.query.material as string | undefined;
+  const sizeParam = req.query.size as string | undefined;
+  const priceParam = req.query.price as string | undefined;
 
   if (!departmentParam) {
     return res.status(404).json({
@@ -50,6 +54,51 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
   };
 
   const orderBy = sortMap[sortParam] ?? sortMap['best-match'];
+  const conditions: string[] = ['p.department = $1'];
+  const values: unknown[] = [department];
+  let paramIndex = 2;
+
+  if (categoryParam) {
+    const categories = categoryParam.split(',').map((c) => c.trim().toLowerCase());
+    conditions.push(`p.category = ANY($${paramIndex})`);
+    values.push(categories);
+    paramIndex++;
+  }
+
+  if (materialParam) {
+    const materials = materialParam.split(',').map((m) => `%${m.trim().toLowerCase()}%`);
+    conditions.push(`p.material ILIKE ANY($${paramIndex})`);
+    values.push(materials);
+    paramIndex++;
+  }
+
+  if (sizeParam) {
+    const sizes = sizeParam.split(',').map((s) => s.trim().toUpperCase());
+    conditions.push(`
+      EXISTS (
+        SELECT 1 FROM product_variants pv_size
+        WHERE pv_size.product_id = p.id
+          AND pv_size.size = ANY($${paramIndex})
+      )
+    `);
+    values.push(sizes);
+    paramIndex++;
+  }
+
+  let havingClause = '';
+  if (priceParam) {
+    const [minStr, maxStr] = priceParam.split('-');
+    const min = Number(minStr);
+    const max = Number(maxStr);
+
+    if (!Number.isNaN(min) && !Number.isNaN(max)) {
+      havingClause = `HAVING MIN(pv.price) BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
+      values.push(min, max);
+      paramIndex += 2;
+    }
+  }
+
+  const whereClause = conditions.join(' AND ');
 
   try {
     const result = await pool.query(
@@ -69,13 +118,9 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
 
       SELECT 
         p.*,
-
         MIN(pv.price) AS min_price,
-
         COALESCE(pr.avg_rating, 0) AS avg_rating,
-
         COALESCE(pr.review_count, 0) AS review_count,
-
         COALESCE(
           json_agg(
             json_build_object(
@@ -110,16 +155,18 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
       LEFT JOIN product_reviews pr
         ON pr.product_id = p.id
 
-      WHERE p.department = $1
+      WHERE ${whereClause}
 
       GROUP BY
         p.id,
         pr.avg_rating,
         pr.review_count
 
+      ${havingClause}
+
       ORDER BY ${orderBy}
       `,
-      [department]
+      values
     );
 
     return res.status(200).json(result.rows);

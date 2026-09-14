@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../config/env";
 import type { Product } from "../interfaces/product.interface";
+import type { CheckedFilter } from "@/interfaces/filter.interface";
 
 
 export async function getProductBySlug(slug: string): Promise<Product> {
@@ -16,7 +17,6 @@ export async function getProductBySlug(slug: string): Promise<Product> {
   }
 }
 
-
 export async function getProductByCategory(category: string): Promise<Product[]> {
   try {
     const res = await axios.get<Product[]>(`${API_URL}/browse/products/category/${category}`)
@@ -28,9 +28,21 @@ export async function getProductByCategory(category: string): Promise<Product[]>
   }
 }
 
-export async function getProductsByDepartment(department: string, sortBy: string): Promise<Product[]> {
+export async function getProductsByDepartment(department: string, sortBy: string, appliedFilters: CheckedFilter[]): Promise<Product[]> {
+  const params: Record<string, string> = {};
+
+  appliedFilters.forEach((item) => {
+    if (typeof item.value === "object" && item.value !== null) {
+      params["priceMin"] = item.value.min;
+      params["priceMax"] = item.value.max;
+    } else {
+      const existing = params[item.filter];
+      params[item.filter] = existing ? `${existing},${item.value}` : String(item.value);
+    }
+  });
+
   try {
-    const res = await axios.get<Product[]>(`${API_URL}/browse/products/department/${department}?sort=${sortBy}`)
+    const res = await axios.get<Product[]>(`${API_URL}/browse/products/department/${department}?sort=${sortBy}`, { params })
     return res.data
   } catch (err) {
     throw new Error(`Error while fetching ${department}`, {

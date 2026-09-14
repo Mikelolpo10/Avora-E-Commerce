@@ -20,7 +20,7 @@ export default function Checkbox({ groupName, option, dispatch }: BoxProps) {
         <input
           type="checkbox"
           name="product-filter"
-          id={value}
+          id={option.name}
           checked={checked}
           onChange={() => dispatch({ type: "TOGGLE", groupName, value })}
           className="absolute h-full w-full opacity-0 cursor-pointer"
@@ -29,7 +29,7 @@ export default function Checkbox({ groupName, option, dispatch }: BoxProps) {
         {checked && <Check size={20} color="white" />}
       </div>
 
-      <label htmlFor={value} className="cursor-pointer">
+      <label htmlFor={option.name} className="cursor-pointer">
         {name}
       </label>
     </div>
