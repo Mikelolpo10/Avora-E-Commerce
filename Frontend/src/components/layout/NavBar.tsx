@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router";
+import { NavLink, Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import brandName from '@/assets/brand-name.webp'
 
@@ -11,17 +11,24 @@ const navItems = [
 ];
 
 export default function NavBar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(window.scrollY > 0);
+  const location = useLocation()
+
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 0);
+  };
+
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
     window.addEventListener("scroll", handleScroll);
-
-    // Cek saat pertama kali render
-    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -36,12 +43,7 @@ export default function NavBar() {
           <Link
             to={'/'}
             className="flex"
-            onClick={() => {
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              });
-            }}
+            onClick={handleLogoClick}
           >
             <img src={brandName} alt="Polini" />
           </Link>
