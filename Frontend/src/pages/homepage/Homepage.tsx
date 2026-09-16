@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import { ChevronUp } from "lucide-react";
+
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
 import ProductCategories from "./ProductCategories";
@@ -7,10 +9,13 @@ import mainAds from '@/assets/main_ads.webp'
 import blibli from '@/assets/logo/blibli.webp'
 import tokopedia from '@/assets/logo/tokopedia.webp'
 import shopee from '@/assets/logo/shopee.webp'
+import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
 export default function Homepage() {
   return (
     <div className="mt-16 w-full flex flex-col bg-gray">
+      <ScrollToTopButton />
+      
       <section className="relative mb-4 w-full flex min-w-0 min-h-0">
         <img
           src={mainAds}
