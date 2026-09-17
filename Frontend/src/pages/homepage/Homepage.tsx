@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
-import ProductCategories from "./ProductCategories";
+import ProductCategories from "./SaleSection";
 import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
 import ads1 from '@/assets/ads_1.webp'
@@ -66,9 +66,7 @@ export default function Homepage() {
       <TopSeller />
 
       <Reviews />
-      {/* Posisi nanti harus dituker tuker */}
 
-      {/* Product Categories */}
       <ProductCategories />
 
       <section className="mt-20 mb-16 mx-16 flex flex-col items-center bg-gray-200">
