@@ -1,15 +1,16 @@
 import { Link } from "react-router";
-import { ChevronUp } from "lucide-react";
 
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
 import ProductCategories from "./ProductCategories";
-import ads_1 from '@/assets/ads_1.webp'
+import ScrollToTopButton from "@/components/common/ScrollToTopButton";
+
+import ads1 from '@/assets/ads_1.webp'
 import mainAds from '@/assets/main_ads.webp'
+import videoAds1 from '@/assets/videoAds1.mov'
 import blibli from '@/assets/logo/blibli.webp'
 import tokopedia from '@/assets/logo/tokopedia.webp'
 import shopee from '@/assets/logo/shopee.webp'
-import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
 export default function Homepage() {
   return (
@@ -39,9 +40,21 @@ export default function Homepage() {
         {/* Tambah cta ke page categories */}
       </section>
 
+      <video
+        src={videoAds1}
+        muted
+        autoPlay
+        playsInline
+        loop
+        preload="none"
+        className="object-cover aspect-square md:aspect-auto"
+      >
+        Video is not supported
+      </video>
+
       <div>
         <img
-          src={ads_1}
+          src={ads1}
           alt="main_ads"
           loading="lazy"
           className="w-full"

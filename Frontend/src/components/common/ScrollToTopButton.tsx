@@ -53,7 +53,7 @@ export default function ScrollToTop() {
               behavior: "smooth",
             });
           }}
-          className="fixed bottom-6 right-6 p-2 rounded-full border-2 border-primary z-10"
+          className="fixed bottom-6 right-6 p-3 rounded-full bg-white z-10"
         >
           <ArrowUp strokeWidth={1.5} size={26} />
         </motion.div>
