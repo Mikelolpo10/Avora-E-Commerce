@@ -11,13 +11,14 @@ import videoAds1 from '@/assets/videoAds1.mov'
 import blibli from '@/assets/logo/blibli.webp'
 import tokopedia from '@/assets/logo/tokopedia.webp'
 import shopee from '@/assets/logo/shopee.webp'
+import FindByCategory from "./FindByCategory";
 
 export default function Homepage() {
   return (
     <div className="mt-16 w-full flex flex-col bg-gray">
       <ScrollToTopButton />
       
-      <section className="relative mb-4 w-full flex min-w-0 min-h-0">
+      <section className="relative w-full flex min-w-0 min-h-0">
         <img
           src={mainAds}
           alt="main_ads"
@@ -39,6 +40,8 @@ export default function Homepage() {
         </div>
         {/* Tambah cta ke page categories */}
       </section>
+
+      <FindByCategory />
 
       <video
         src={videoAds1}
