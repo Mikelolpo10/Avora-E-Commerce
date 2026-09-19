@@ -2,12 +2,15 @@ import { Link } from "react-router";
 
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
-import ProductCategories from "./SaleSection";
+import SaleSection from "./SaleSection";
 import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
-import ads1 from '@/assets/ads_1.webp'
-import mainAds from '@/assets/main_ads.webp'
-import videoAds1 from '@/assets/videoAds1.mov'
+import ads1 from '@/assets/homepage_ads/ads_1.webp'
+import ads2 from '@/assets/homepage_ads/ads_2.webp'
+import ads3 from '@/assets/homepage_ads/ads_3.webp'
+import mainAds from '@/assets/homepage_ads/main_ads.webp'
+import videoAds1 from '@/assets/homepage_ads/videoAds1.mov'
+
 import blibli from '@/assets/logo/blibli.webp'
 import tokopedia from '@/assets/logo/tokopedia.webp'
 import shopee from '@/assets/logo/shopee.webp'
@@ -17,7 +20,7 @@ export default function Homepage() {
   return (
     <div className="mt-16 w-full flex flex-col bg-gray">
       <ScrollToTopButton />
-      
+
       <section className="relative w-full flex min-w-0 min-h-0">
         <img
           src={mainAds}
@@ -50,7 +53,9 @@ export default function Homepage() {
         playsInline
         loop
         preload="none"
-        className="object-cover aspect-square md:aspect-auto"
+        height={600}
+        width={2000}
+        className="mb-8 object-cover aspect-square md:aspect-auto"
       >
         Video is not supported
       </video>
@@ -60,17 +65,39 @@ export default function Homepage() {
           src={ads1}
           alt="main_ads"
           loading="lazy"
-          className="w-full"
           height={600}
           width={2000}
+          className="w-full"
         />
       </div>
 
       <TopSeller />
 
-      <Reviews />
+      <div>
+        <img
+          src={ads2}
+          alt="main_ads"
+          loading="lazy"
+          height={600}
+          width={2000}
+          className="mb-8 w-full"
+        />
+      </div>
 
-      <ProductCategories />
+      <SaleSection />
+
+      <div>
+        <img
+          src={ads3}
+          alt="main_ads"
+          loading="lazy"
+          height={600}
+          width={2000}
+          className="w-full"
+        />
+      </div>
+
+      <Reviews />
 
       <section className="mt-20 mb-16 mx-16 flex flex-col items-center bg-gray-200">
         <h2 className="mt-10 mb-12 text-4xl font-bold">OUR MARKETPLACE!</h2>
