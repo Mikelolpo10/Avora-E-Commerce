@@ -21,7 +21,7 @@ export default function ProductCategories() {
   if (isLoading || todaysDealLoading) return null
 
   return (
-    <section className="mx-8 lg:mx-16 flex flex-col gap-8">
+    <section className="mx-8 lg:mx-16 flex flex-col gap-4">
       <DiscountColection
         key='Flash Sale'
         slug="flash-sale"

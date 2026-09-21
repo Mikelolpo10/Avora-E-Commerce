@@ -11,9 +11,9 @@ import ads3 from '@/assets/homepage_ads/ads_3.webp'
 import mainAds from '@/assets/homepage_ads/main_ads.webp'
 import videoAds1 from '@/assets/homepage_ads/videoAds1.mov'
 
-import blibli from '@/assets/logo/blibli.webp'
-import tokopedia from '@/assets/logo/tokopedia.webp'
-import shopee from '@/assets/logo/shopee.webp'
+// import blibli from '@/assets/logo/blibli.webp'
+// import tokopedia from '@/assets/logo/tokopedia.webp'
+// import shopee from '@/assets/logo/shopee.webp'
 import FindByCategory from "./FindByCategory";
 
 export default function Homepage() {
@@ -80,7 +80,7 @@ export default function Homepage() {
           loading="lazy"
           height={600}
           width={2000}
-          className="mb-8 w-full"
+          className="w-full"
         />
       </div>
 
@@ -93,13 +93,13 @@ export default function Homepage() {
           loading="lazy"
           height={600}
           width={2000}
-          className="w-full"
+          className="mt-20 w-full"
         />
       </div>
 
       <Reviews />
 
-      <section className="mt-20 mb-16 mx-16 flex flex-col items-center bg-gray-200">
+      {/* <section className="mt-20 mb-16 mx-16 flex flex-col items-center bg-gray-200">
         <h2 className="mt-10 mb-12 text-4xl font-bold">OUR MARKETPLACE!</h2>
         <div className="mb-16 px-60 w-full flex justify-between">
           <Link to='https://www.blibli.com/brand/polini' target="_blank" className="p-2 flex items-center h-24 w-44 rounded-xl transition-all hover:bg-white hover:scale-110">
@@ -112,7 +112,7 @@ export default function Homepage() {
             <img src={tokopedia} alt="Blibli" className="w-full h-full" />
           </Link>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

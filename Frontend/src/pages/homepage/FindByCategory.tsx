@@ -38,7 +38,7 @@ export default function FindByCategory() {
 
       <div className="mt-4 grid grid-cols-4 md:grid-cols-6 grid-flow-row gap-y-6 gap-x-10 text-center text-sm cursor-pointer">
         {categories.map(({ img, name, path }) => (
-          <Link to={`/browse/${path}`}>
+          <Link key={name} to={`/browse/${path}`}>
             <div className='mb-auto px-8 flex justify-center items-center'>
               <img
                 src={img}

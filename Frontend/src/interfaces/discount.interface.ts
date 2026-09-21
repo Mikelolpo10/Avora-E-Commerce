@@ -4,6 +4,7 @@ export interface Discount extends Product {
   promotion_product_id: string;
   promotion_id: string;
   product_id: string;
+  price: number;
   discount: number;
   start_at: string;
   end_at: string;
