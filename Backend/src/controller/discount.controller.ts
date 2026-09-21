@@ -16,20 +16,30 @@ export const getFlashSale = async (req: Request, res: Response) => {
         products.slug,
         products.image_url,
         products.description,
-        products.gender,
+        products.department,
         products.material,
         products.status,
         products.category_id,
-        products.price,
+        first_variant.price,
         product_categories.name AS category_name,
         product_categories.slug AS category_slug
       FROM promotion_products
-      INNER JOIN products ON promotion_products.product_id = products.id
-      LEFT JOIN product_categories ON product_categories.id = products.category_id
-      INNER JOIN promotions ON promotions.id = promotion_products.promotion_id
+      INNER JOIN products 
+        ON promotion_products.product_id = products.id
+      LEFT JOIN product_categories 
+        ON product_categories.id = products.category_id
+      INNER JOIN promotions 
+        ON promotions.id = promotion_products.promotion_id
+      LEFT JOIN LATERAL (
+        SELECT price
+        FROM product_variants
+        WHERE product_variants.product_id = products.id
+        ORDER BY is_default DESC
+        LIMIT 1
+      ) AS first_variant ON true
       WHERE promotion_products.start_at <= NOW()
-      AND promotion_products.end_at >= NOW()
-      AND promotions.slug = 'flash-sale';
+        AND promotion_products.end_at >= NOW()
+        AND promotions.slug = 'flash-sale';
     `)
     return res.status(200).json(result.rows)
   } catch (err) {
