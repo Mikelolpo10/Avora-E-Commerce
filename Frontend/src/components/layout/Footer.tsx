@@ -60,7 +60,7 @@ export default function Footer() {
             <button className="ml-4 px-4 h-full min-w-30 bg-black text-white text-sm hover:cursor-pointer">Sign me up!</button>
           </form>
           <h3 className="mt-8 text-primary-black text-lg font-bold">Hubungi Kami</h3>
-          <div className="mt-4 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <span>Butuh bantuan? Kami siap membantu!</span>
             <Link to='https://maps.app.goo.gl/fXoTAq765GiKTpPC8' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={location} alt="Location" className="w-8" /> Jl. Kebon kacang III no 4-B Ruko Tanah Abang
