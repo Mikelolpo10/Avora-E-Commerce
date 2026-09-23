@@ -34,27 +34,29 @@ export default function DiscountColection({ title, slug, products }: DiscountCol
         <Link to={`/${title}/${slug}`} className="flex items-center font-medium text-sm text-primary">Lihat Semua</Link>
       </div>
 
-      <div className="pt-8 grid grid-cols-5 md:grid-cols-6 gap-2 overflow-hidden">
-        {products?.slice(0, 6).map(({ promotion_product_id, name, slug, image_url, price, discount }) => (
+      <div className="pt-4 grid grid-cols-5 md:grid-cols-5 gap-2 overflow-hidden">
+        {products?.slice(0, 5).map(({ promotion_product_id, name, slug, image_url, price, discount, category_name }) => (
           <Link
             key={promotion_product_id}
             to={`/products/${slug}`}
-            className="flex flex-col items-center hover:border"
+            className="pb-4 flex flex-col hover:border border-ash/50"
           >
-            <div className="relative flex items-center h-60 w-full overflow-hidden">
+            <div className="relative flex items-center h-72 w-full overflow-hidden">
               <img
                 src={`${API_URL}${image_url}-1.webp`}
                 alt={image_url}
+                loading="lazy"
                 className="h-full w-full bg-gray-dark transition-all duration-200 hover:scale-105 hover:brightness-90 object-contain"
               />
               <div className="absolute top-0 right-0 py-2 px-2 flex text-center w-12 bg-red-700 text-sm text-white font-semibold">{discount}% Off</div>
             </div>
 
-            <div className="pt-3 flex flex-col items-center">
-              <h4 className="text-lg font-semibold truncate">{name}</h4>
-              <div className="pt-1 flex gap-2 text-[15px] ">
-                <span className="line-through text-ash">{formatRupiah(price)}</span>
-                <span className="text-red-500">{getDiscountedPrice(price, discount)}</span>
+            <div className="pt-3 flex flex-col">
+              <span>{category_name}</span>
+              <h4 className="font-medium">{name}</h4>
+              <div className="pt-1 flex gap-2 text-lg font-formal">
+                <span className="text-red-500 font-semibold">{getDiscountedPrice(price, discount)}</span>
+                <span className="line-through text-sm">{formatRupiah(price)}</span>
               </div>
             </div>
           </Link>
