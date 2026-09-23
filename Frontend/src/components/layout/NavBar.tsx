@@ -1,6 +1,6 @@
 import { NavLink, Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
-import brandName from '@/assets/brand-name.webp'
+import brandName from '@/assets/brand_name.webp'
 
 const navItems = [
   { name: 'NEW ARRIVAL', path: '/new_arrival' },
@@ -45,7 +45,11 @@ export default function NavBar() {
             className="flex"
             onClick={handleLogoClick}
           >
-            <img src={brandName} alt="Polini" />
+            <img
+              src={brandName}
+              alt="Polini"
+              className="h-7"
+            />
           </Link>
         </div>
 
