@@ -31,10 +31,10 @@ export default function DiscountColection({ title, slug, products }: DiscountCol
             setIsExpired={setIsExpired}
           />
         </div>
-        <Link to={`/${title}/${slug}`} className="flex items-center font-medium text-sm text-primary">Lihat Semua</Link>
+        <Link to={`/${title}/${slug}`} className="flex items-center font-medium text-sm text-primary">See All</Link>
       </div>
 
-      <div className="pt-4 grid grid-cols-5 md:grid-cols-5 gap-2 overflow-hidden">
+      <div className="pt-4 grid grid-cols-5 md:grid-cols-5 gap-1 overflow-hidden">
         {products?.slice(0, 5).map(({ promotion_product_id, name, slug, image_url, price, discount, category_name }) => (
           <Link
             key={promotion_product_id}
@@ -54,8 +54,8 @@ export default function DiscountColection({ title, slug, products }: DiscountCol
             <div className="pt-3 flex flex-col">
               <span>{category_name}</span>
               <h4 className="font-medium">{name}</h4>
-              <div className="pt-1 flex gap-2 text-lg font-formal">
-                <span className="text-red-500 font-semibold">{getDiscountedPrice(price, discount)}</span>
+              <div className="pt-1 flex items-center gap-2 text-lg font-semibold">
+                <span className="text-red-500">{getDiscountedPrice(price, discount)}</span>
                 <span className="line-through text-sm">{formatRupiah(price)}</span>
               </div>
             </div>

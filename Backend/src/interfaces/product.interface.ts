@@ -1,5 +1,5 @@
-type department = "women" | "man" | "unisex"
-type status = "active" | "inactive" | "draft"
+export type department = "women" | "man" | "unisex"
+export type status = "active" | "inactive" | "draft"
 
 
 export interface Product {

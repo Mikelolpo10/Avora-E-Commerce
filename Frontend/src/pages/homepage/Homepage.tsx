@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import Reviews from "./Reviews";
 import TopSeller from "./TopSeller";
 import SaleSection from "./SaleSection";
-import ScrollToTopButton from "@/components/common/ScrollToTopButton";
+import ScrollToTopButton from "@/components/common/SlingButton";
 
 import ads1 from '@/assets/homepage_ads/ads_1.webp'
 import ads2 from '@/assets/homepage_ads/ads_2.webp'
