@@ -66,13 +66,13 @@ export default function ProductCategoryPage() {
           checkedFilters={checkedFilters}
         />
 
-        <div className="mb-8 grid grid-cols-4 auto-rows-84 gap-y-16">
+        <div className="mb-8 grid grid-cols-4 auto-rows-100 gap-y-16">
           {isFetching ? (
             Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))
           ) : (
-            data!.map(({ id, name, slug, department, image_url, variants }) => (
+            data!.map(({ id, name, slug, department, image_url, variants, average_rating, review_count }) => (
               <ProductCard
                 key={id}
                 name={name}
@@ -80,6 +80,9 @@ export default function ProductCategoryPage() {
                 department={department}
                 variants={variants}
                 image_url={image_url}
+                average_rating={average_rating}
+                reviews_count={review_count}
+                showRating={true}
                 lazy={false}
               />
             ))

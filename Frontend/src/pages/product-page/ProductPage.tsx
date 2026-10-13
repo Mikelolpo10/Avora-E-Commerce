@@ -34,12 +34,12 @@ export default function ProductPage() {
       value: 'most-recent',
     },
     {
-      name: 'Highest Rating',
-      value: 'highest-rating',
+      name: 'Most Helpful',
+      value: 'most-helpful',
     },
     {
-      name: 'Lowest Rating',
-      value: 'lowest-rating',
+      name: 'Most Relevant',
+      value: 'most-relevant',
     },
   ]
 
@@ -136,7 +136,7 @@ export default function ProductPage() {
                   </p>
                   <div className="mt-auto flex w-full items-center justify-between">
                     <span className="text-ash text-sm font-medium">Timoty {'\u00B7'} Men</span>
-                    <div className="px-4 py-2 flex items-center gap-2 border border-gray-dark rounded-3xl text-sm cursor-pointer select-none">
+                    <div className="px-4 py-2 flex items-center gap-2 border border-ash/50 rounded-3xl text-sm cursor-pointer select-none">
                       <ThumbsUp size={18} />
                       Helpfull 0
                     </div>

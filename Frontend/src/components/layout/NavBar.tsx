@@ -1,13 +1,14 @@
 import { NavLink, Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import brandName from '@/assets/brand_name.webp'
+import { Search, ShoppingCart, User } from "lucide-react";
 
 const navItems = [
-  { name: 'NEW ARRIVAL', path: '/new_arrival' },
-  { name: 'WOMEN', path: '/department/women' },
-  { name: 'MEN', path: '/department/men' },
-  { name: 'KIDS', path: '/department/kids' },
-  { name: 'ON SALE', path: '/on_sale' },
+  { name: 'New Arrival', path: '/new_arrival' },
+  { name: 'Women', path: '/department/women' },
+  { name: 'Men', path: '/department/men' },
+  { name: 'Kids', path: '/department/kids' },
+  { name: 'On Sale', path: '/on_sale' },
 ];
 
 export default function NavBar() {
@@ -37,8 +38,7 @@ export default function NavBar() {
 
   return (
     <>
-      <header className={`${isScrolled ? 'bg-gray-50/90' : 'mt-8 bg-white'} py-4 fixed px-26 max-h-16 w-full flex items-center justify-between gap-8 text-black box-border z-20`}>
-        {/* Left Section kasih ukuran ke gambar biar g berubah ukuran*/}
+      <header className={`${isScrolled ? 'mt-2' : 'mt-8'} py-4 fixed px-16 max-h-16 w-full flex items-center justify-between gap-8 text-black box-border z-20`}>
         <div className="w-[15%] flex">
           <Link
             to={'/'}
@@ -48,19 +48,23 @@ export default function NavBar() {
             <img
               src={brandName}
               alt="Polini"
-              className="h-7"
+              className="h-7 w-32"
             />
           </Link>
         </div>
 
         {/* Mid Section */}
-        <nav className="px-16 flex flex-1 items-center justify-between">
+        {/* Bikin animasi kecil underline saat hover */}
+        <nav className="flex w-120 items-center justify-between rounded-full border border-gray/30 bg-white/15 px-6 py-3 shadow-lg shadow-black/5 backdrop-blur-xl">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
-              to={`${item.path}`}
+              to={item.path}
               className={({ isActive }) =>
-                `h-full flex items-center transition-all duration-300 hover:text-primary hover:underline hover:underline-offset-8 ${isActive ? 'font-bold' : 'font-medium'
+                `relative px-3 py-1 text-sm font-medium transition-all duration-300 hover:text-primary
+                  ${isActive
+                  ? 'font-semibold text-darker after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-5 after:-translate-x-1/2 after:rounded-full after:bg-primary'
+                  : 'text-dark'
                 }`
               }
             >
@@ -70,10 +74,16 @@ export default function NavBar() {
         </nav>
 
         {/* Right Section */}
-        <div className="w-[15%] flex items-center justify-end">
-          <div>Cart</div>
-          <div>Profile</div>
-          <div>Search</div>
+        <div className="w-[15%] flex items-center justify-end gap-2">
+          <div className="p-3 flex h-12 w-12 items-center justify-between rounded-full border border-gray/30 bg-white/15 shadow-lg shadow-black/5 backdrop-blur-xl cursor-pointer">
+            <Search strokeWidth={2} width={24} color="#271f1c" />
+          </div>
+          <div className="p-3 flex h-12 w-20 items-center justify-between rounded-full border border-gray/30 bg-white/15 shadow-lg shadow-black/5 backdrop-blur-xl cursor-pointer">
+            <ShoppingCart strokeWidth={2} width={24} color="#271f1c" /> (0)
+          </div>
+          <div className="p-2 flex h-12 w-12 items-center justify-between rounded-full border border-gray/30 bg-white/15 shadow-lg shadow-black/5 backdrop-blur-xl cursor-pointer">
+            <User strokeWidth={2} width={36} color="#271f1c" />
+          </div>
         </div>
       </header>
     </>

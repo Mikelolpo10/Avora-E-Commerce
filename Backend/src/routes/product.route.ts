@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { getProductsByCategories, getProductBySlug, getSimilarProducts, getProductsByDepartment } from '../controller/product.controller.js'
+import { getProductsByCategories, getProductBySlug, getProductsByDepartment, similar, trending } from '../controller/product.controller.js'
 
 const router = Router()
 
-router.get('/:productSlug', getProductBySlug)
+router.get('/trending', trending)
 router.get('/department/:department', getProductsByDepartment)
 router.get('/category/:category', getProductsByCategories)
-router.get('/getsimilarproducts/:productSlug', getSimilarProducts)
+router.get('/similar/:productSlug', similar)
+router.get('/:productSlug', getProductBySlug)
 
 export default router

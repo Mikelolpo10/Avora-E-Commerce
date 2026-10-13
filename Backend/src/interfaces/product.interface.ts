@@ -1,6 +1,16 @@
 export type department = "women" | "man" | "unisex"
 export type status = "active" | "inactive" | "draft"
 
+export interface Variant {
+  id: string;
+  sku: string;
+  size: string;
+  color_name: string;
+  color_code: string;
+  price: number;
+  stock: number;
+  is_default: boolean;
+}
 
 export interface Product {
   id: string;
@@ -16,4 +26,17 @@ export interface Product {
   updated_at: string;
   perawatan: string;
   sold_count: number;
+  variants: Variant[];
+}
+
+export interface ProductCardProps {
+  id?: number;
+  name: string;
+  slug: string;
+  department: department;
+  image_url: string;
+  lazy: boolean;
+  variants: Variant[];
+  avgRatings: number;
+  ratingCount: number;
 }

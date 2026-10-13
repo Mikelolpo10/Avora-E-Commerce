@@ -49,7 +49,7 @@ export default function ProductDetails({ data }: ProductDetailsProps) {
       <SizeOptions data={data} activeVariant={activeVariant} setActiveVariant={setActiveVariant} />
 
       {stock > 5 ? (
-        <small className="ml-1 text-[14px] text-primary">
+        <small className="ml-1 text-[14px] text-dark">
           In Stock ·{" "}
           <span className="font-semibold">{stock}</span> left
         </small>

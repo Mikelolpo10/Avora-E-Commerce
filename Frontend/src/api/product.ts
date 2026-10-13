@@ -1,11 +1,11 @@
 import axios from "axios";
 import { API_URL } from "../config/env";
-import type { Product } from "../interfaces/product.interface";
+import type { Product, ProductCardProps } from "../interfaces/product.interface";
 import type { CheckedFilter } from "@/interfaces/filter.interface";
 
 
 export async function getProductBySlug(slug: string): Promise<Product> {
-  if (!slug) throw new Error("Product ID is required");
+  if (!slug) throw new Error("Product Slug is required");
 
   try {
     const res = await axios.get<Product>(`${API_URL}/browse/products/${slug}`)
@@ -53,11 +53,20 @@ export async function getProductsByDepartment(department: string, sortBy: string
 
 export async function getSimilarProducts(slug: string): Promise<Product[]> {
   try {
-    const res = await axios.get<Product[]>(`${API_URL}/browse/products/getsimilarproducts/${slug}`)
+    const res = await axios.get<Product[]>(`${API_URL}/browse/products/similar/${slug}`)
     return res.data
   } catch (err) {
     throw new Error(`Error while fetching similar products to ${slug}`, {
       cause: err
     })
+  }
+}
+
+export async function getTrendingProducts() {
+  try {
+    const res = await axios.get<ProductCardProps[]>(`${API_URL}/browse/products/trending`)
+    return res.data
+  } catch (error) {
+    console.log(`Error fetching Trending Products: ${error}`)    
   }
 }

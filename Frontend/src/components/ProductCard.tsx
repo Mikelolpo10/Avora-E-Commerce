@@ -1,20 +1,11 @@
-import { Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import { Link } from "react-router"
 import { API_URL } from "@/config/env";
 import formatRupiah from "@/utils/formatRupiah";
-import type { department, Variant } from "@/interfaces/product.interface";
+import type { ProductCardProps } from "@/interfaces/product.interface";
 import capitalize from "@/utils/capitalize";
 
-interface ProductProps {
-  name: string;
-  slug: string;
-  department: department;
-  image_url: string;
-  lazy: boolean;
-  variants: Variant[];
-}
-
-export default function ProductCard({ name, slug, department, image_url, lazy, variants }: ProductProps) {
+export default function ProductCard({ name, slug, department, image_url, lazy, variants, average_rating, reviews_count, showRating = false }: ProductCardProps) {
   const SIZE_ORDER = ['S', 'M', 'L', 'XL', 'XXL'];
 
   function getSizeRange(variants: { size: string }[]) {
@@ -31,7 +22,7 @@ export default function ProductCard({ name, slug, department, image_url, lazy, v
   return (
     <Link
       to={`/products/${slug}`}
-      className="group flex h-88 flex-col"
+      className="group flex h-100 flex-col"
     >
       <div className="relative flex min-h-[60%] items-center justify-center overflow-hidden bg-gray-dark">
         <img
@@ -43,15 +34,23 @@ export default function ProductCard({ name, slug, department, image_url, lazy, v
       </div>
 
       <div className="pt-3 flex flex-col gap-0.5">
-        <span>{capitalize(department)}, {getSizeRange(variants)}</span>
+        <div className="pr-8 flex justify-between">
+          <span>{capitalize(department)}, {getSizeRange(variants)}</span>
+          {/* Tambah fitur masuk wishlist */}
+          <Heart size={20} />
+        </div>
         <h4 className="truncate">{name}</h4>
         <div className="mt-1 mb-1 flex text-[15px] font-semibold">
           <span className="text-lg tracking-tighter">{formatRupiah(variants[0].price)}</span>
         </div>
-        <div className="flex gap-0.5 text-xs">
-          <Star fill="primary" stroke="" size={16} />
-          <span className="text-primary-black font-normal tracking-tighter"><strong className="text-black font-semibold">4.7</strong> (412)</span>
-        </div>
+
+        {showRating ?
+          <div className="flex gap-0.5 text-xs">
+            <Star fill="primary" stroke="" size={16} />
+            <span className="text-primary-black font-normal tracking-tighter"><strong className="text-black font-semibold">{Number(average_rating ?? 0).toFixed(1)}</strong> ({reviews_count})</span>
+          </div>
+          : ''
+        }
       </div>
     </Link>
   )

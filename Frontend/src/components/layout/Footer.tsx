@@ -41,7 +41,7 @@ const helpSection = {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#c3e2fa]">
+    <footer className="bg-darker text-shadow-md">
       <div className="
         px-6 py-10
         md:px-12
@@ -51,25 +51,24 @@ export default function Footer() {
         md:grid-cols-2
         lg:grid-cols-3
         gap-10 
-        text-primary-black
+        text-white/90
       ">
         <div>
-          <h3 className="text-lg font-bold">Daftar untuk dapatkan informasi terbaru, penawaran ekslusif, serta Diskon hingga 15% untuk pesanan pertama.</h3>
+          <h3 className="text-lg font-semibold">Daftar untuk dapatkan informasi terbaru, penawaran ekslusif, serta Diskon hingga 15% untuk pesanan pertama.</h3>
           <form className="mt-4 h-12 flex">
-            <input type="email" placeholder="Enter your email" className="pl-4 h-full w-full border-b-2 border-b-black text-black text-sm placeholder:text-black placeholder:text-sm" />
-            <button className="ml-4 px-4 h-full min-w-30 bg-black text-white text-sm hover:cursor-pointer">Sign me up!</button>
+            <input type="email" placeholder="Enter your email" className="pl-4 h-full w-full border-b-2 border-b-black text-sm placeholder:text-white/95 placeholder:text-sm" />
+            <button className="ml-4 px-4 h-full min-w-30 bg-black text-sm hover:cursor-pointer">Sign me up!</button>
           </form>
-          <h3 className="mt-8 text-primary-black text-lg font-bold">Hubungi Kami</h3>
+          <h3 className="mt-8 text-lg font-bold">Hubungi Kami</h3>
           <div className="flex flex-col gap-2">
             <span>Butuh bantuan? Kami siap membantu!</span>
             <Link to='https://maps.app.goo.gl/fXoTAq765GiKTpPC8' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={location} alt="Location" className="w-8" /> Jl. Kebon kacang III no 4-B Ruko Tanah Abang
             </Link>
-            {/* NANTI HAPUS BG LOCATION */}
-            <Link to='' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
+            <Link to='' className="h-12 flex items-center justify-center bg-black text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={whatsapp} alt="Whatsapp" className="w-8" /> WA kami di +62 813-8802-0043
             </Link>
-            <Link to='mailto:info@polini.co.id' className="h-12 flex items-center justify-center bg-black text-white text-sm font-semibold transition-all duration-300 hover:bg-accent">
+            <Link to='mailto:info@polini.co.id' className="h-12 flex items-center justify-center bg-black text-sm font-semibold transition-all duration-300 hover:bg-accent">
               <img src={email} alt="Email" className="mr-2 w-5" /> Email kami di info@polini.co.id
             </Link>
           </div>
@@ -85,7 +84,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="text-primary-black transition-colors hover:text-accent"
+                      className=" transition-colors hover:text-accent"
                     >
                       {link.name}
                     </Link>
@@ -104,7 +103,7 @@ export default function Footer() {
               <li key={link.href}>
                 <Link
                   to={link.href}
-                  className="text-primary-black transition-colors hover:text-accent"
+                  className=" transition-colors hover:text-accent"
                 >
                   {link.name}
                 </Link>
@@ -116,7 +115,7 @@ export default function Footer() {
 
       <Divider color="ash" />
 
-      <div className="py-8 px-24 flex w-full items-center justify-between text-ash text-md">
+      <div className="py-8 px-24 flex w-full items-center justify-between text-white/90 text-md">
         <small>
           Copyright © 2026 - Mikelolpo - All Rights Reserved
         </small>

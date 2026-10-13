@@ -49,7 +49,7 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
     'price-low-high': 'min_price ASC NULLS LAST',
     'price-high-low': 'min_price DESC NULLS LAST',
     'most-popular': 'p.sold_count DESC NULLS LAST',
-    'highest-rating': 'avg_rating DESC NULLS LAST',
+    'highest-rating': 'average_rating DESC NULLS LAST',
     'most-reviews': 'review_count DESC NULLS LAST',
   };
 
@@ -106,7 +106,7 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
       WITH product_reviews AS (
         SELECT
           pv.product_id,
-          AVG(r.rating) AS avg_rating,
+          AVG(r.rating) AS average_rating,
           COUNT(*) AS review_count
         FROM reviews r
         JOIN order_items oi
@@ -119,7 +119,7 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
       SELECT 
         p.*,
         MIN(pv.price) AS min_price,
-        COALESCE(pr.avg_rating, 0) AS avg_rating,
+        COALESCE(pr.average_rating, 0) AS average_rating,
         COALESCE(pr.review_count, 0) AS review_count,
         COALESCE(
           json_agg(
@@ -159,7 +159,7 @@ export const getProductsByDepartment = async (req: Request, res: Response) => {
 
       GROUP BY
         p.id,
-        pr.avg_rating,
+        pr.average_rating,
         pr.review_count
 
       ${havingClause}
@@ -193,6 +193,15 @@ export const getProductBySlug = async (req: Request, res: Response) => {
       `
       SELECT 
         p.*,
+
+        (
+          SELECT pv_default.price
+          FROM product_variants pv_default
+          WHERE pv_default.product_id = p.id
+            AND pv_default.is_default = true
+          LIMIT 1
+        ) AS price,
+
         COALESCE(
           json_agg(
             json_build_object(
@@ -213,6 +222,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
                 WHEN 'L' THEN 3
                 WHEN 'XL' THEN 4
                 WHEN 'XXL' THEN 5
+                ELSE 99
               END
           ) FILTER (WHERE pv.id IS NOT NULL),
           '[]'
@@ -247,101 +257,185 @@ export const getProductBySlug = async (req: Request, res: Response) => {
   }
 };
 
-export const getSimilarProducts = async (req: Request, res: Response) => {
-  const { productSlug } = req.params;
+export const similar = async (req: Request, res: Response) => {
+  try {
+    const { productSlug } = req.params;
 
-  const productResult = await pool.query(
-    `
-    SELECT category_id, department, material, price
-    FROM products
-    WHERE slug = $1
-    `,
-    [productSlug]
-  );
+    const productResult = await pool.query(
+      `
+      SELECT
+        p.category_id,
+        p.department,
+        p.material,
+        pv.price
+      FROM products p
+      JOIN product_variants pv
+        ON pv.product_id = p.id
+        AND pv.is_default = true
+      WHERE p.slug = $1
+      `,
+      [productSlug]
+    );
 
-  if (productResult.rows.length === 0) {
-    return res.status(404).json({
-      message: "Product not found",
+    if (productResult.rows.length === 0) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    const product = productResult.rows[0];
+
+    const result = await pool.query(
+      `
+      SELECT 
+        p.*,
+
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pv.id,
+              'sku', pv.sku,
+              'size', pv.size,
+              'color_name', pv.color_name,
+              'color_code', pv.color_code,
+              'price', pv.price,
+              'stock', pv.stock,
+              'is_default', pv.is_default
+            )
+            ORDER BY 
+              pv.color_name,
+              CASE pv.size
+                WHEN 'S' THEN 1
+                WHEN 'M' THEN 2
+                WHEN 'L' THEN 3
+                WHEN 'XL' THEN 4
+                WHEN 'XXL' THEN 5
+                ELSE 99
+              END
+          ) FILTER (WHERE pv.id IS NOT NULL),
+          '[]'
+        ) AS variants,
+
+        (
+          CASE 
+            WHEN p.category_id = $1 THEN 50 
+            ELSE 0 
+          END +
+
+          CASE 
+            WHEN p.department = $2 THEN 20 
+            ELSE 0 
+          END +
+
+          CASE 
+            WHEN p.material = $3 THEN 20 
+            ELSE 0 
+          END +
+
+          CASE
+            WHEN default_pv.price BETWEEN $4 * 0.8 AND $4 * 1.2
+            THEN 10
+            ELSE 0
+          END
+        ) AS similarity_score
+
+      FROM products p
+
+      LEFT JOIN product_variants pv
+        ON pv.product_id = p.id
+
+      LEFT JOIN product_variants default_pv
+        ON default_pv.product_id = p.id
+        AND default_pv.is_default = true
+
+      WHERE p.slug != $5
+        AND p.status = 'active'
+
+      GROUP BY p.id, default_pv.price
+
+      ORDER BY similarity_score DESC
+
+      LIMIT 6;
+      `,
+      [
+        product.category_id,
+        product.department,
+        product.material,
+        product.price,
+        productSlug,
+      ]
+    );
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("SIMILAR ERROR:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : error,
     });
   }
+};
 
-  const product = productResult.rows[0];
+export const trending = async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(`
+      WITH review_stats AS (
+        SELECT
+          pv.product_id,
+          ROUND(AVG(r.rating)::numeric, 1)::float AS average_rating,
+          COUNT(r.id)::int                        AS review_count
+        FROM reviews r
+        JOIN order_items oi      ON oi.id = r.order_item_id
+        JOIN product_variants pv ON pv.id = oi.product_variant_id
+        -- WHERE r.created_at > NOW() - INTERVAL '30 days'
+        GROUP BY pv.product_id
+      )
+      SELECT
+        p.id,
+        p.name,
+        p.slug,
+        p.department,
+        p.image_url,
+        COALESCE(
+          (
+            SELECT json_agg(
+              json_build_object(
+                'id', v.id,
+                'sku', v.sku,
+                'size', v.size,
+                'color_name', v.color_name,
+                'color_code', v.color_code,
+                'price', v.price,
+                'stock', v.stock,
+                'is_default', v.is_default
+              )
+              ORDER BY
+                v.color_name,
+                CASE v.size
+                  WHEN 'S' THEN 1
+                  WHEN 'M' THEN 2
+                  WHEN 'L' THEN 3
+                  WHEN 'XL' THEN 4
+                  WHEN 'XXL' THEN 5
+                  ELSE 6
+                END
+            )
+            FROM product_variants v
+            WHERE v.product_id = p.id
+          ),
+          '[]'::json
+        ) AS variants
+      FROM review_stats rs
+      JOIN products p ON p.id = rs.product_id
+      WHERE p.status = 'active'
+      ORDER BY rs.review_count DESC, rs.average_rating DESC, p.id
+      LIMIT 4;
+    `);
 
-  const result = await pool.query(
-    `
-    SELECT 
-      p.*,
-
-      COALESCE(
-        json_agg(
-          json_build_object(
-            'id', pv.id,
-            'sku', pv.sku,
-            'size', pv.size,
-            'color_name', pv.color_name,
-            'color_code', pv.color_code,
-            'price', pv.price,
-            'stock', pv.stock,
-            'is_default', pv.is_default
-          )
-          ORDER BY 
-            pv.color_name,
-            CASE pv.size
-              WHEN 'S' THEN 1
-              WHEN 'M' THEN 2
-              WHEN 'L' THEN 3
-              WHEN 'XL' THEN 4
-              WHEN 'XXL' THEN 5
-            END
-        ) FILTER (WHERE pv.id IS NOT NULL),
-        '[]'
-      ) AS variants,
-
-      (
-        CASE 
-          WHEN p.category_id = $1 THEN 50 
-          ELSE 0 
-        END +
-
-        CASE 
-          WHEN p.department = $2 THEN 20 
-          ELSE 0 
-        END +
-
-        CASE 
-          WHEN p.material = $3 THEN 20 
-          ELSE 0 
-        END +
-
-        CASE
-          WHEN p.price BETWEEN $4 * 0.8 AND $4 * 1.2
-          THEN 10
-          ELSE 0
-        END
-      ) AS similarity_score
-
-    FROM products p
-
-    LEFT JOIN product_variants pv
-      ON pv.product_id = p.id
-
-    WHERE p.slug != $5
-      AND p.status = 'active'
-
-    GROUP BY p.id
-
-    ORDER BY similarity_score DESC
-
-    LIMIT 6;
-    `,
-    [
-      product.category_id,
-      product.department,
-      product.material,
-      product.price,
-      productSlug,
-    ]
-  );
-
-  return res.status(200).json(result.rows);
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('trending query failed:', error);
+    return res.status(500).json({ message: 'Failed to fetch trending products' });
+  }
 };

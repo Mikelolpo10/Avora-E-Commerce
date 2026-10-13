@@ -25,7 +25,22 @@ export interface Product {
   updated_at: string;
   perawatan: string;
   sold_count: number;
+  average_rating: number;
+  review_count: number;
   variants: Variant[];
+}
+
+export interface ProductCardProps {
+  id?: number;
+  name: string;
+  slug: string;
+  department: department;
+  image_url: string;
+  lazy: boolean;
+  variants: Variant[];
+  average_rating?: number;
+  reviews_count?: number;
+  showRating?: boolean;
 }
 
 export interface TopSellerProductData {
